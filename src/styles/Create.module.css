@@ -1,0 +1,35 @@
+.wrapper {
+    max-width: 1200px;
+    margin: 3rem auto 0;
+    text-align: center;
+}
+
+.wrapper h2 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.wrapper input {
+    display: block;
+    margin: 1rem auto;
+    width: 80%;
+    max-width: 600px;
+}
+
+.wrapper textarea {
+    display: block;
+    width: 80%;
+    margin: 0 auto 1rem;
+}
+
+.btn_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem;
+}
+
+.btn_wrapper > button:nth-child(2) {
+    margin: 2rem;
+}
