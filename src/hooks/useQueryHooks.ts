@@ -2,6 +2,7 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
+  keepPreviousData,
 } from "@tanstack/react-query";
 import { getRecipes } from "../api/getRecipes";
 import { fetchUserInfo } from "../api/fetchUserInfo";
@@ -44,8 +45,12 @@ export const usePostSignUpData = () => {
   });
 };
 
-export const useFetchRecipes = () => {
-  return useQuery({queryKey: ["recipes"], queryFn: getRecipes})
+export const useFetchRecipes = (page: number) => {
+  return useQuery({
+    queryKey: ["recipes", page],
+    queryFn: () => getRecipes(page),
+    placeholderData: keepPreviousData,
+  });
 };
 
 export const useFetchAuthInfo = () => {

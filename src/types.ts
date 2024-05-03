@@ -97,3 +97,8 @@ export type ModalType = {
   onOpen: () => void;
   onClose: () => void;
 };
+
+export type PaginationType = {
+  page: number;
+  clickPage: (pg: number) => void;
+}

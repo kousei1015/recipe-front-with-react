@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import Pagination from "../components/Pagination";
+import usePaginateStore from "../store/usePaginateStore";
 import { useFetchRecipes, useFetchAuthInfo } from "../hooks/useQueryHooks";
 import styles from "./index.module.css";
 import AuthHeader from "../components/AuthHeader";
@@ -12,8 +13,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [page, setPage] = useState(1);
-  const { data: recipes } = useFetchRecipes();
+  const { page } = usePaginateStore();
+
+  const { data: recipes } = useFetchRecipes(page);
 
   const { data: authInfo, refetch } = useFetchAuthInfo();
 
@@ -38,6 +40,8 @@ function Index() {
       <h2 className={styles.heading}>レシピ一覧</h2>
 
       <Recipes recipes={recipes} />
+
+      <Pagination recipes={recipes} />
     </>
   );
 }
