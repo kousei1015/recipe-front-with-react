@@ -11,7 +11,7 @@ import {
   usePostFavoriteRecipe,
 } from "../../hooks/useQueryHooks";
 import NoImage from "../../../public/NoImg.jpg";
-
+import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
 export const Route = createFileRoute("/$recipeId")({
   component: SinglePost,
 });
@@ -60,6 +60,7 @@ function SinglePost() {
         <div className={styles.process}>
           <p>{recipe.process}</p>
         </div>
+        <h2>所要時間: {getCookingTImeLabel(recipe.cooking_time)}</h2>
         <h3>材料</h3>
         <ul className={styles.ingredient_list}>
           {recipe?.ingredients?.map((ingredient) => {

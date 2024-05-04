@@ -13,6 +13,7 @@ function Create() {
   const [process, setProcess] = useState("");
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]);
   const [image, setImage] = useState<File | null>(null);
+  const [cookingTime, setCookingTIme] = useState("");
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -61,6 +62,10 @@ function Create() {
     }
   };
 
+  const handleCookTime = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCookingTIme(e.target.value);
+  };
+
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const formData = new FormData();
@@ -74,7 +79,8 @@ function Create() {
     if (image) {
       formData.append("image", image);
     }
-    await postMutation.mutateAsync(formData)
+    formData.append("cooking_time", cookingTime);
+    await postMutation.mutateAsync(formData);
     navigate({
       to: "/",
     });
@@ -97,6 +103,15 @@ function Create() {
         cols={30}
         rows={10}
       ></textarea>
+
+      <p>所要時間</p>
+      <select name="cooking-time" onChange={handleCookTime}>
+        <option value="1">5分未満</option>
+        <option value="2">10分未満</option>
+        <option value="3">20分未満</option>
+        <option value="4">30分未満</option>
+        <option value="5">30分以上</option>
+      </select>
       {ingredients.map((ingredient, index) => (
         <div key={index}>
           <input

@@ -33,6 +33,15 @@
     padding: 1rem 0;
 }
 
+.cooking_time {
+    color: var(--white);
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0.5rem;
+    border-radius: 2rem;
+}
+
 @media screen and (max-width: 1200px) {
     .recipe_wrapper {
         grid-template-columns: repeat(2, 1fr);

@@ -34,6 +34,14 @@ export type RECIPEBASE = {
   user_name: string;
 };
 
+export enum CookingTime {
+  LessThan5Minutes = 1,
+  LessThan10Minutes = 2,
+  LessThan20Minutes = 3,
+  LessThan30Minutes = 4,
+  MoreThan30Minutes = 5,
+}
+
 export type RECIPE = {
   id: string;
   recipe_name: string;
@@ -48,6 +56,7 @@ export type RECIPE = {
   avatar_url: string;
   favorite_id?: string;
   follow_id?: string;
+  cooking_time: CookingTime;
 };
 
 export type RECIPES = {
@@ -57,6 +66,7 @@ export type RECIPES = {
     image_url: string;
     user_id: string;
     user_name: string;
+    cooking_time: CookingTime;
   }[];
   pagination?: {
     total_count: number;

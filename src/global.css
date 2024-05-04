@@ -190,6 +190,7 @@ a:not([class]) {
 }
 
 :root {
+  --white: #fff;
   --orange: #ff8f05;
   --hover: #ff5d05;
   --bg: #f6f4ef;
