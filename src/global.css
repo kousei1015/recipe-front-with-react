@@ -192,7 +192,7 @@ a:not([class]) {
 :root {
   --white: #fff;
   --orange: #ff8f05;
-  --hover: #ff5d05;
+  --red: #ff5d05;
   --bg: #f6f4ef;
   --text-color: #565656;
   --shadow-color: #bcbcbc;
@@ -232,7 +232,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--hover);
+  background-color: var(--red);
 }
 
 button:disabled {
