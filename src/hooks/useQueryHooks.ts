@@ -97,39 +97,33 @@ export const usePostFavoriteRecipe = (id: string) => {
   });
 };
 
-export const useCancelFavRecipes = (
-  recipeId: string | undefined = undefined
-) => {
+export const useCancelFavRecipes = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteFavoriteRecipe,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
       queryClient.invalidateQueries({ queryKey: ["favoritesRecipes"] });
     },
   });
 };
 
-export const useFollow = (recipeId: string | undefined = undefined) => {
+export const useFollow = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postFollow,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
     },
   });
 };
 
 export const useCancelFollowing = (
-  recipeId: string | undefined = undefined
 ) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteFollowing(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
     },
   });
 };

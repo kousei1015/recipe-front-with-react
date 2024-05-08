@@ -21,7 +21,7 @@ function SinglePost() {
   const { useParams } = Route;
   const params = useParams();
 
-  const { data: recipe } = useFetchRecipe(params.recipeId);
+  const { data: recipe, refetch } = useFetchRecipe(params.recipeId);
 
   const { data: authInfo } = useFetchAuthInfo();
 
@@ -29,14 +29,14 @@ function SinglePost() {
 
   const favoriteMutation = usePostFavoriteRecipe(recipe?.id!);
 
-  const unfavoriteMutation = useCancelFavRecipes(params.recipeId);
+  const unfavoriteMutation = useCancelFavRecipes();
 
-  const followMutation = useFollow(params.recipeId);
+  const followMutation = useFollow();
 
-  const unfollowMutation = useCancelFollowing(params.recipeId);
+  const unfollowMutation = useCancelFollowing();
 
-  if(!recipe || !authInfo) {
-    return <SkeletonRecipe />
+  if (!recipe || !authInfo) {
+    return <SkeletonRecipe />;
   }
 
   const isLogin = authInfo!.is_login;
@@ -44,7 +44,7 @@ function SinglePost() {
   const isFavorited = !!recipe.favorite_id;
   const isFollowed = !!recipe.follow_id;
 
-
+  
   return (
     <div className={styles.wrapper}>
       <div className={styles.recipe}>
@@ -104,6 +104,7 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfavoriteMutation.mutate(recipe.favorite_id as string);
+                  refetch()
                 }}
               >
                 お気に入りを解除
@@ -113,6 +114,7 @@ function SinglePost() {
                 onClick={async (e) => {
                   e.preventDefault();
                   favoriteMutation.mutate(recipe.id);
+                  refetch()
                 }}
               >
                 保存
@@ -128,6 +130,7 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfollowMutation.mutate(recipe?.follow_id as string);
+                  refetch()
                 }}
               >
                 フォローを解除
@@ -137,6 +140,7 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   followMutation.mutate(recipe?.user_id);
+                  refetch()
                 }}
               >
                 フォロー
