@@ -6,7 +6,7 @@ import { usePostRecipe } from "../../hooks/useQueryHooks";
 export const Route = createFileRoute("/create")({
   component: Create,
 });
-function Create() {
+export function Create() {
   const postMutation = usePostRecipe();
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -138,3 +138,5 @@ function Create() {
     </div>
   );
 }
+
+export default Create;

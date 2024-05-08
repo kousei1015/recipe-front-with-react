@@ -152,3 +152,5 @@ function SinglePost() {
     </div>
   );
 }
+
+export default SinglePost;
