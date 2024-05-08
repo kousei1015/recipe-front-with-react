@@ -9,7 +9,7 @@ const SkeletonRecipes = () => {
       <h2 className={styles.heading}>レシピ一覧</h2>
       <div className={styles.skeleton_wrapper}>
         {Array.from({ length: itemCount }).map((_, index) => (
-          <article key={index} className={styles.skeletonItem}>
+          <article key={index} className={styles.skeletonItem} data-testid="skeletonsTest">
             <div className={styles.skeleton_block}></div>
           </article>
         ))}
