@@ -10,7 +10,7 @@ export async function getFollowings(): Promise<FOLLOW> {
   };
 
   const res = await axios.get(
-    "http://localhost:3000//v1/users/myfollowings.json",
+    "http://localhost:3000/v1/users/myfollowings.json",
     { headers }
   );
   return res.data;
