@@ -196,6 +196,8 @@ a:not([class]) {
   --bg: #f6f4ef;
   --text-color: #565656;
   --shadow-color: #bcbcbc;
+  --blue: #007bff;
+  --dark-blue: #0056b3;
 }
 
 * {
