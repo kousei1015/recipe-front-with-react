@@ -82,6 +82,7 @@ export type FavRecipes = {
   user_id: string;
   user_name: string;
   image_url: string;
+  cooking_time: CookingTime;
 }[];
 
 export type FOLLOW = {
