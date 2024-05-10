@@ -12,6 +12,8 @@ import {
 } from "../../hooks/useQueryHooks";
 import NoImage from "../../../public/NoImg.jpg";
 import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
+import NotFound from "../../components/NotFound";
+
 export const Route = createFileRoute("/$recipeId")({
   component: SinglePost,
 });
@@ -21,9 +23,9 @@ function SinglePost() {
   const { useParams } = Route;
   const params = useParams();
 
-  const { data: recipe, refetch } = useFetchRecipe(params.recipeId);
+  const { data: recipe, refetch, error: recipeError } = useFetchRecipe(params.recipeId);
 
-  const { data: authInfo } = useFetchAuthInfo();
+  const { data: authInfo, error: authError } = useFetchAuthInfo();
 
   const deleteRecipeMutation = useDeleteRecipe();
 
@@ -35,6 +37,10 @@ function SinglePost() {
 
   const unfollowMutation = useCancelFollowing();
 
+
+  if(recipeError || authError) {
+    return <NotFound />
+  }
   if (!recipe || !authInfo) {
     return <SkeletonRecipe />;
   }
