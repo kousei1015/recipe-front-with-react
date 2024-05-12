@@ -20,6 +20,7 @@ import { setCookies } from "../utils/setCookies";
 import { patchProfile } from "../api/patchProfile";
 import { postRecipe } from "../api/postRecipe";
 import deleteRecipe from "../api/deleteRecipe";
+import { getRecipesByUser } from "../api/getRecipesByUser";
 
 export const usePostSignInData = () => {
   const queryClient = useQueryClient();
@@ -82,6 +83,10 @@ export const useFetchFollowings = () => {
 export const useFetchFollowers = () => {
   return useQuery({ queryKey: ["followers"], queryFn: getFollowers });
 };
+
+export const useFetchRecipesByUser = (id: string) => {
+  return useQuery({ queryKey: ["followerRecipes", id], queryFn: () => getRecipesByUser(id) })
+}
 
 export const useFetchFavoritesRecipes = () => {
   return useQuery({ queryKey: ["favoritesRecipes"], queryFn: getFavorites });
