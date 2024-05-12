@@ -6,7 +6,7 @@ import {
   useCancelFollowing,
 } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/followings")({
+export const Route = createFileRoute("/followings/")({
   component: Followings,
 });
 
@@ -22,7 +22,7 @@ function Followings() {
         return (
           <div key={following.id} className={styles.follow_users}>
             <Link
-              href={`followings/${following.followed_id}/recipes`}
+              to={`${following.followed_id}/recipes`}
               className={styles.link}
             >
               <img

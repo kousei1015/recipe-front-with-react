@@ -3,7 +3,7 @@ import styles from "../../styles/Follow.module.css";
 import NoImage from "../../../public/NoImg.jpg";
 import { useFetchFollowers } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/followers")({
+export const Route = createFileRoute("/followers/")({
   component: Followers,
 });
 
@@ -17,7 +17,7 @@ function Followers() {
         return (
           <div key={follower.id} className={styles.follow_users}>
             <Link
-              href={`followings/${follower.followed_id}/recipes`}
+              to={`${follower.followed_id}/recipes`}
               className={styles.link}
             >
               <img
