@@ -17,7 +17,7 @@ const FavoriteRecipes = ({
       {favoriteRecipes?.map((recipe) => {
         return (
           <article key={recipe.favorite_id} className={styles.recipe}>
-            <Link href={`/${recipe.recipe_id}`}>
+            <Link to={`/${recipe.recipe_id}`}>
               <div className={styles.img_wrapper}>
                 <img
                   src={recipe.image_url || NoImage}
