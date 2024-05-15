@@ -37,7 +37,7 @@ function SinglePost() {
 
   const unfollowMutation = useCancelFollowing();
 
-
+  
   if(recipeError || authError) {
     return <NotFound />
   }
@@ -50,7 +50,7 @@ function SinglePost() {
   const isFavorited = !!recipe.favorite_id;
   const isFollowed = !!recipe.follow_id;
 
-  
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.recipe}>
@@ -110,8 +110,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfavoriteMutation.mutate(recipe.favorite_id as string);
-                  refetch()
+                  refetch();
                 }}
+                style={{ opacity: unfavoriteMutation.isPending ? 0.2 : 1 }}
               >
                 お気に入りを解除
               </button>
@@ -120,8 +121,9 @@ function SinglePost() {
                 onClick={async (e) => {
                   e.preventDefault();
                   favoriteMutation.mutate(recipe.id);
-                  refetch()
+                  refetch();
                 }}
+                style={{ opacity: favoriteMutation.isPending ? 0.2 : 1 }}
               >
                 保存
               </button>
@@ -136,8 +138,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfollowMutation.mutate(recipe?.follow_id as string);
-                  refetch()
+                  refetch();
                 }}
+                style={{ opacity: unfollowMutation.isPending ? 0.2 : 1 }}
               >
                 フォローを解除
               </button>
@@ -146,8 +149,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   followMutation.mutate(recipe?.user_id);
-                  refetch()
+                  refetch();
                 }}
+                style={{ opacity: followMutation.isPending ? 0.2 : 1 }}
               >
                 フォロー
               </button>
