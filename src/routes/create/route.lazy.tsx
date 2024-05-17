@@ -1,9 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import styles from "../../styles/Create.module.css";
 import { usePostRecipe } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/create")({
+export const Route = createLazyFileRoute("/create")({
   component: Create,
 });
 export function Create() {

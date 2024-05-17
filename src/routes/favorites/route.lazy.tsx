@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute } from "@tanstack/react-router";
 import styles from "./route.module.css"
 import {
   useFetchFavoritesRecipes,
 } from "../../hooks/useQueryHooks";
 import FavoriteRecipes from "../../components/FavoriteRecipes";
-export const Route = createFileRoute("/favorites")({
+export const Route = createLazyFileRoute("/favorites")({
   component: Favorites,
 });
 

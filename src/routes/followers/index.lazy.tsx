@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
 import NoImage from "../../../public/NoImg.jpg";
 import { useFetchFollowers } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/followers/")({
+export const Route = createLazyFileRoute("/followers/")({
   component: Followers,
 });
 

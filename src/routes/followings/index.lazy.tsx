@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
 import NoImage from "../../../public/NoImg.jpg";
 import {
@@ -6,7 +6,7 @@ import {
   useCancelFollowing,
 } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/followings/")({
+export const Route = createLazyFileRoute("/followings/")({
   component: Followings,
 });
 
