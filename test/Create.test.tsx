@@ -2,7 +2,7 @@ import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import Create from "../src/routes/create/route";
+import Create from "../src/routes/create/route.lazy";
 import {
   createRouter,
   createRootRoute,

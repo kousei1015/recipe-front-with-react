@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, it, expect, afterEach } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
-import SignIn from "../src/routes/signin/route";
+import SignIn from "../src/routes/signin/route.lazy";
 import {
   createRouter,
   createRootRoute,
