@@ -37,7 +37,7 @@ function SinglePost() {
 
   const unfollowMutation = useCancelFollowing();
 
-  
+
   if(recipeError || authError) {
     return <NotFound />
   }
@@ -82,10 +82,14 @@ function SinglePost() {
           <button
             onClick={async (e) => {
               e.preventDefault();
-              await deleteRecipeMutation.mutateAsync(params.recipeId);
-              navigate({
-                to: "/",
-              });
+              const confirmed =
+                window.confirm("このレシピを削除しますか？");
+              if (confirmed) {
+                await deleteRecipeMutation.mutateAsync(params.recipeId);
+                navigate({
+                  to: "/",
+                });
+              }
             }}
           >
             削除
