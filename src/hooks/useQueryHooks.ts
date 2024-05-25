@@ -21,6 +21,7 @@ import { patchProfile } from "../api/patchProfile";
 import { postRecipe } from "../api/postRecipe";
 import deleteRecipe from "../api/deleteRecipe";
 import { getRecipesByUser } from "../api/getRecipesByUser";
+import { putRecipe } from "../api/putRecipe";
 
 export const usePostSignInData = () => {
   const queryClient = useQueryClient();
@@ -66,6 +67,16 @@ export const usePostRecipe = () => {
   return useMutation({ mutationFn: postRecipe });
 };
 
+export const usePutRecipe = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: putRecipe,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recipes"] })
+    }
+  })
+};
+
 export const useDeleteRecipe = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -85,8 +96,11 @@ export const useFetchFollowers = () => {
 };
 
 export const useFetchRecipesByUser = (id: string) => {
-  return useQuery({ queryKey: ["followerRecipes", id], queryFn: () => getRecipesByUser(id) })
-}
+  return useQuery({
+    queryKey: ["followerRecipes", id],
+    queryFn: () => getRecipesByUser(id),
+  });
+};
 
 export const useFetchFavoritesRecipes = () => {
   return useQuery({ queryKey: ["favoritesRecipes"], queryFn: getFavorites });
@@ -122,8 +136,7 @@ export const useFollow = () => {
   });
 };
 
-export const useCancelFollowing = (
-) => {
+export const useCancelFollowing = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteFollowing(id),
