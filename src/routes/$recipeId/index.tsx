@@ -14,7 +14,7 @@ import NoImage from "../../../public/NoImg.jpg";
 import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
 import NotFound from "../../components/NotFound";
 
-export const Route = createFileRoute("/$recipeId")({
+export const Route = createFileRoute("/$recipeId/")({
   component: SinglePost,
 });
 
@@ -23,7 +23,11 @@ function SinglePost() {
   const { useParams } = Route;
   const params = useParams();
 
-  const { data: recipe, refetch, error: recipeError } = useFetchRecipe(params.recipeId);
+  const {
+    data: recipe,
+    refetch,
+    error: recipeError,
+  } = useFetchRecipe(params.recipeId);
 
   const { data: authInfo, error: authError } = useFetchAuthInfo();
 
@@ -37,9 +41,8 @@ function SinglePost() {
 
   const unfollowMutation = useCancelFollowing();
 
-
-  if(recipeError || authError) {
-    return <NotFound />
+  if (recipeError || authError) {
+    return <NotFound />;
   }
   if (!recipe || !authInfo) {
     return <SkeletonRecipe />;
@@ -49,7 +52,6 @@ function SinglePost() {
   const isOwnRecipe = recipe.user_id === authInfo!.user_id;
   const isFavorited = !!recipe.favorite_id;
   const isFollowed = !!recipe.follow_id;
-
 
   return (
     <div className={styles.wrapper}>
@@ -79,21 +81,30 @@ function SinglePost() {
         </ul>
         {/*自身の投稿の場合は削除ボタンを表示させる。 そうでない場合は投稿したユーザー名を表示させる */}
         {isOwnRecipe ? (
-          <button
-            onClick={async (e) => {
-              e.preventDefault();
-              const confirmed =
-                window.confirm("このレシピを削除しますか？");
-              if (confirmed) {
-                await deleteRecipeMutation.mutateAsync(params.recipeId);
-                navigate({
-                  to: "/",
-                });
-              }
-            }}
-          >
-            削除
-          </button>
+          <>
+            <button
+              onClick={async (e) => {
+                e.preventDefault();
+                const confirmed = window.confirm("このレシピを削除しますか？");
+                if (confirmed) {
+                  await deleteRecipeMutation.mutateAsync(params.recipeId);
+                  navigate({
+                    to: "/",
+                  });
+                }
+              }}
+            >
+              削除
+            </button>
+
+            <button
+              onClick={() => {
+                navigate({ to: "/$recipeId/edit" });
+              }}
+            >
+              編集
+            </button>
+          </>
         ) : (
           <div className={styles.avatar_wrapper}>
             <img
