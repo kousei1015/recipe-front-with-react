@@ -6,7 +6,7 @@ import {
   screen,
 } from "@testing-library/react";
 import Index from "../src/routes/index";
-import SinglePost from "../src/routes/$recipeId/route";
+import SinglePost from "../src/routes/$recipeId/index";
 import {
   createRouter,
   createRootRoute,

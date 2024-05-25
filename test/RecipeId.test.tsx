@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
-import SinglePost from "../src/routes/$recipeId/route";
+import SinglePost from "../src/routes/$recipeId/index";
 import {
   createRouter,
   createRootRoute,
