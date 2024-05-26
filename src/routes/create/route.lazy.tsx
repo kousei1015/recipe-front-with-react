@@ -13,7 +13,7 @@ export function Create() {
   const [process, setProcess] = useState("");
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]);
   const [image, setImage] = useState<File | null>(null);
-  const [cookingTime, setCookingTIme] = useState("");
+  const [cookingTime, setCookingTIme] = useState("1");
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
