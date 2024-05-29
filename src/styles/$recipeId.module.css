@@ -49,6 +49,10 @@
       height: 50px;
       border-radius: 50%;
   }
+
+  .edit_button {
+    background-color: var(--bright-green);
+  }
   
   @media screen and (max-width: 768px) {
     .process {

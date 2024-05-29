@@ -98,6 +98,7 @@ function SinglePost() {
             </button>
 
             <button
+              className={styles.edit_button}
               onClick={() => {
                 navigate({ to: "/$recipeId/edit" });
               }}
