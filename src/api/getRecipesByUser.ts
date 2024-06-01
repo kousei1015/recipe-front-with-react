@@ -1,19 +1,15 @@
+import apiClient from "./apiClient";
+import { addAuthHeaders } from "./addAuthHeader";
 import { RECIPES } from "../types";
-import axios from "axios";
-import Cookies from "js-cookie";
 
 export async function getRecipesByUser(id: string): Promise<RECIPES> {
-  const headers = {
-    client: Cookies.get("client"),
-    uid: Cookies.get("uid"),
-    "access-token": Cookies.get("access-token"),
-  };
-
-  const recipes = await axios.get(
-    `http://localhost:3000/v1/users/${id}/recipes.json`,
-    {
-      headers,
-    }
-  );
-  return recipes.data;
+  try {
+    const recipes = await apiClient.get(`/users/${id}/recipes.json`, {
+      headers: addAuthHeaders(),
+    });
+    return recipes.data;
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    throw error;
+  }
 }
