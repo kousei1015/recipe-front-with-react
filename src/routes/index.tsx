@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import Pagination from "../components/Pagination";
 import usePaginateStore from "../store/usePaginateStore";
+import useSelectForSort from "../store/useSelectForSort";
 import { useFetchRecipes, useFetchAuthInfo } from "../hooks/useQueryHooks";
 import styles from "./index.module.css";
 import AuthHeader from "../components/AuthHeader";
 import NoAuthHeader from "../components/NoAuthHeader";
 import Recipes from "../components/Recipes";
 import SkeletonRecipes from "../components/SkeletonRecipes";
+import SelectForSort from "../components/SelectForSort";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -14,8 +16,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { page } = usePaginateStore();
-
-  const { data: recipes } = useFetchRecipes(page);
+  const { orderType } = useSelectForSort();
+  const { data: recipes } = useFetchRecipes(page, orderType);
 
   const { data: authInfo, refetch } = useFetchAuthInfo();
 
@@ -38,6 +40,8 @@ function Index() {
       </div>
 
       <h2 className={styles.heading}>レシピ一覧</h2>
+      
+      <SelectForSort />
 
       <Recipes recipes={recipes} />
 
@@ -46,4 +50,4 @@ function Index() {
   );
 }
 
-export default Index
+export default Index;

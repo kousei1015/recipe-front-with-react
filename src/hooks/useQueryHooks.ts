@@ -47,10 +47,10 @@ export const usePostSignUpData = () => {
   });
 };
 
-export const useFetchRecipes = (page: number) => {
+export const useFetchRecipes = (page: number, option: string) => {
   return useQuery({
-    queryKey: ["recipes", page],
-    queryFn: () => getRecipes(page),
+    queryKey: ["recipes", page, option],
+    queryFn: () => getRecipes(page, option),
     placeholderData: keepPreviousData,
   });
 };
