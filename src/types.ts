@@ -113,3 +113,8 @@ export type PaginationType = {
   page: number;
   clickPage: (pg: number) => void;
 }
+
+export type SelectValueType = {
+  orderType: "" | "cookingTimeSort";
+  changeOrderType: (option: "" | "cookingTimeSort") => void;
+}
