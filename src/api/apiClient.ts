@@ -7,6 +7,9 @@ export const apiUrl = import.meta.env.PROD
   console.log(apiUrl)
 const apiClient = axios.create({
   baseURL: apiUrl,
+  headers: {
+    "Accept": "application/json"
+  }
 });
 
 export default apiClient;
