@@ -10,7 +10,7 @@ import {
   RouterProvider,
 } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 const queryClient = new QueryClient({
@@ -23,10 +23,9 @@ const queryClient = new QueryClient({
 });
 
 const handlers = [
-  rest.get("http://localhost:3000/v1/recipes/:recipeId.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/v1/recipes/:recipeId.json", () => {
+    return HttpResponse.json(
+      {
         id: 1,
         recipe_name: "test_name",
         process: "process_test",
@@ -45,15 +44,16 @@ const handlers = [
             quantity: "100cc",
           },
         ],
-      })
+      },
+      { status: 200 }
     );
   }),
-  rest.get("http://localhost:3000/v1/users.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/v1/users.json", () => {
+    return HttpResponse.json(
+      {
         is_login: false,
-      })
+      },
+      { status: 200 }
     );
   }),
 ];
@@ -92,8 +92,7 @@ describe("RecipeId Component", () => {
     );
 
     expect(router.state.location.pathname).toBe("/1");
-    await screen.findByTestId("skeletonTest")
-    
+    await screen.findByTestId("skeletonTest");
   });
 
   it("should render component", async () => {
@@ -118,8 +117,8 @@ describe("RecipeId Component", () => {
     await router.load();
     await screen.findByText("test_name");
     screen.getByText("test_user");
-    screen.getByText("test1 100g")
-    screen.getByText("test2 100cc")
-    screen.getByText("所要時間: 10分未満")
+    screen.getByText("test1 100g");
+    screen.getByText("test2 100cc");
+    screen.getByText("所要時間: 10分未満");
   });
 });

@@ -1,10 +1,6 @@
 import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
-import {
-  render,
-  cleanup,
-  screen,
-} from "@testing-library/react";
+import { render, cleanup, screen } from "@testing-library/react";
 import Index from "../src/routes/index";
 import SinglePost from "../src/routes/$recipeId/index";
 import {
@@ -15,7 +11,7 @@ import {
   RouterProvider,
 } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { rest } from "msw";
+import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
 
@@ -30,10 +26,9 @@ const queryClient = new QueryClient({
 
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
-  rest.get("http://localhost:3000/v1/recipes.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/v1/recipes.json", () => {
+    return HttpResponse.json(
+      {
         data: [
           {
             id: 1,
@@ -42,16 +37,14 @@ export const handlers = [
             cooking_time: 3,
           },
         ],
-      })
+      },
+      { status: 200 }
     );
   }),
-  rest.get("http://localhost:3000/v1/users.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        is_login: false,
-      })
-    );
+  http.get("http://localhost:3000/v1/users.json", () => {
+    return HttpResponse.json({
+      is_login: false,
+    }, {status: 200});
   }),
 ];
 
@@ -162,6 +155,6 @@ describe("Index Component", () => {
 
     await userEvent.click(screen.getByText("test"));
 
-    expect(router.state.location.pathname).toBe("/1")
+    expect(router.state.location.pathname).toBe("/1");
   });
 });

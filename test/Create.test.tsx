@@ -11,7 +11,7 @@ import {
   RouterProvider,
 } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { vi } from "vitest";
 
@@ -40,17 +40,17 @@ vi.mock("../hooks/useQueryHooks", async () => {
 
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
-  rest.post("http://localhost:3000/v1/recipes", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
+  http.post("http://localhost:3000/v1/recipes", () => {
+    return HttpResponse.json(
+      {
         id: 2,
         name: "test_name",
         process: "test_process",
         ingredients: [{ name: "test1", quantity: "100cc" }],
         cooking_time: 2,
         image_url: null,
-      })
+      },
+      { status: 201 }
     );
   }),
 ];

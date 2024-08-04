@@ -10,7 +10,7 @@ import {
   RouterProvider,
 } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,10 +23,9 @@ const queryClient = new QueryClient({
 
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
-  rest.get("http://localhost:3000/v1/favorites.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
+  http.get("http://localhost:3000/v1/favorites.json", () => {
+    return HttpResponse.json(
+      [
         {
           favorite_id: 1,
           recipe_id: 1,
@@ -36,15 +35,16 @@ export const handlers = [
           user_name: "test_user",
           avatar_url: null,
         },
-      ])
+      ],
+      { status: 200 }
     );
   }),
-  rest.get("http://localhost:3000/v1/users.json", (_, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
+  http.get("http://localhost:3000/v1/users.json", () => {
+    return HttpResponse.json(
+      {
         is_login: false,
-      })
+      },
+      { status: 200 }
     );
   }),
 ];
