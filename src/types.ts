@@ -75,6 +75,11 @@ export type RECIPES = {
   };
 };
 
+export type SUGGESTED_RECIPES = Pick<
+  RECIPE,
+  "id" | "recipe_name" | "image_url"
+>[];
+
 export type FavRecipes = {
   favorite_id: string;
   recipe_id: string;
@@ -112,9 +117,9 @@ export type ModalType = {
 export type PaginationType = {
   page: number;
   clickPage: (pg: number) => void;
-}
+};
 
 export type SelectValueType = {
   orderType: "" | "cookingTimeSort";
   changeOrderType: (option: "" | "cookingTimeSort") => void;
-}
+};
