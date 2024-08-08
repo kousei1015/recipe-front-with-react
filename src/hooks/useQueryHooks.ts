@@ -22,6 +22,7 @@ import { postRecipe } from "../api/postRecipe";
 import deleteRecipe from "../api/deleteRecipe";
 import { getRecipesByUser } from "../api/getRecipesByUser";
 import { putRecipe } from "../api/putRecipe";
+import { getAllRecipes } from "../api/getAllRecipes";
 
 export const usePostSignInData = () => {
   const queryClient = useQueryClient();
@@ -46,6 +47,13 @@ export const usePostSignUpData = () => {
     },
   });
 };
+
+export const useFetchAllRecipes = () => {
+  return useQuery({
+    queryKey: ["allRecipes"],
+    queryFn: getAllRecipes
+  })
+}
 
 export const useFetchRecipes = (page: number, option: string) => {
   return useQuery({
