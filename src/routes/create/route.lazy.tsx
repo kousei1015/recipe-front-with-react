@@ -1,4 +1,5 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import imageCompression from "browser-image-compression";
 import { useState } from "react";
 import styles from "../../styles/Create.module.css";
 import { usePostRecipe } from "../../hooks/useQueryHooks";
@@ -55,10 +56,21 @@ export function Create() {
     setIngredients(newIngredients);
   };
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
-      setImage(files[0]);
+      const file = files[0];
+      const options = {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 1000,
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImage(compressedFile);
+      } catch (error) {
+        window.alert("エラーが発生しました。もう一度やり直してください");
+      }
     }
   };
 
