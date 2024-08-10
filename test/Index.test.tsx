@@ -43,8 +43,8 @@ export const handlers = [
   }),
   http.get("http://localhost:3000/v1/users.json", () => {
     return HttpResponse.json({
-      is_login: false,
-    }, {status: 200});
+        is_login: false,
+      }, {status: 200});
   }),
 ];
 
@@ -62,7 +62,7 @@ afterAll(() => {
 });
 
 describe("Index Component", () => {
-  it("should render component", async () => {
+  it("should render recipes", async () => {
     const rootRoute = createRootRoute();
     const indexRoute = createRoute({
       getParentRoute: () => rootRoute,
@@ -79,28 +79,7 @@ describe("Index Component", () => {
         <RouterProvider router={router} />
       </QueryClientProvider>
     );
-
     await rendered.findByText("レシピ一覧");
-  });
-
-  it("should render component", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute]),
-      history: createMemoryHistory({ initialEntries: ["/"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-
     await screen.findByText("test");
     await screen.findByText("20分未満");
   });
