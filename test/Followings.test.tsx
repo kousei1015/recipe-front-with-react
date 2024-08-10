@@ -53,7 +53,7 @@ afterAll(() => {
   server.close();
 });
 
-describe("Index Component", () => {
+describe("Followings Component", () => {
   it("should render followings commponent", async () => {
     const rootRoute = createRootRoute();
     const favoriteRoute = createRoute({

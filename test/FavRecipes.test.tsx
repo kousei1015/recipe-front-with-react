@@ -62,7 +62,7 @@ afterAll(() => {
   server.close();
 });
 
-describe("Index Component", () => {
+describe("FavRecipes Component", () => {
   it("should render favorite commponent", async () => {
     const rootRoute = createRootRoute();
     const favoriteRoute = createRoute({

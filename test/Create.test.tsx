@@ -68,7 +68,7 @@ afterAll(() => {
   server.close();
 });
 
-describe("Index Component", () => {
+describe("Create Component", () => {
   it("should render component", async () => {
     const rootRoute = createRootRoute();
     const postRoute = createRoute({

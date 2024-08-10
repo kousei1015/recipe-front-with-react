@@ -64,17 +64,17 @@ afterAll(() => {
   server.close();
 });
 
-describe("RecipeId Component", () => {
+describe("EditRecipe Component", () => {
   it("Firstly, should render skeleton component", async () => {
     const rootRoute = createRootRoute();
     const detail = createRoute({
       getParentRoute: () => rootRoute,
-      path: "/1",
+      path: "/1/edit",
       component: () => <Index />,
     });
     const router = createRouter({
       routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1"] }),
+      history: createMemoryHistory({ initialEntries: ["/1/edit"] }),
     });
 
     render(
@@ -83,7 +83,7 @@ describe("RecipeId Component", () => {
       </QueryClientProvider>
     );
 
-    expect(router.state.location.pathname).toBe("/1");
+    expect(router.state.location.pathname).toBe("/1/edit");
     await screen.findByText("レシピ編集画面");
     screen.getByText("材料を追加");
     await screen.findByDisplayValue("test_name");

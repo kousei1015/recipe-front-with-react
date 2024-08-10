@@ -53,8 +53,8 @@ afterAll(() => {
   server.close();
 });
 
-describe("Index Component", () => {
-  it("should render followers commponent", async () => {
+describe("Followers Component", () => {
+  it("should render Followers commponent", async () => {
     const rootRoute = createRootRoute();
     const favoriteRoute = createRoute({
       getParentRoute: () => rootRoute,
