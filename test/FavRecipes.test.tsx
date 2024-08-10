@@ -39,14 +39,6 @@ export const handlers = [
       { status: 200 }
     );
   }),
-  http.get("http://localhost:3000/v1/users.json", () => {
-    return HttpResponse.json(
-      {
-        is_login: false,
-      },
-      { status: 200 }
-    );
-  }),
 ];
 
 const server = setupServer(...handlers);
