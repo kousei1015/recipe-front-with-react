@@ -3,6 +3,7 @@ import {
   useNavigate,
   useParams,
 } from "@tanstack/react-router";
+import imageCompression from "browser-image-compression";
 import { useState, useEffect } from "react";
 import styles from "../../styles/Create.module.css";
 import { useFetchRecipe } from "../../hooks/useQueryHooks";
@@ -69,10 +70,21 @@ export function Index() {
     setIngredients(newIngredients);
   };
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
-      setImage(files[0]);
+      const file = files[0];
+      const options = {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 1000,
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImage(compressedFile);
+      } catch (error) {
+        window.alert("エラーが発生しました。もう一度やり直してください");
+      }
     }
   };
 
