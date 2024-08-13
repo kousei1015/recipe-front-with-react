@@ -199,6 +199,7 @@ a:not([class]) {
   --blue: #007bff;
   --dark-blue: #0056b3;
   --bright-green: #2ca559;
+  --dark-green: #0d8438;
 }
 
 * {

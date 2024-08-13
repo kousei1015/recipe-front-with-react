@@ -50,8 +50,18 @@
       border-radius: 50%;
   }
 
+  .button_wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
   .edit_button {
     background-color: var(--bright-green);
+  }
+
+  .edit_button:hover {
+    background-color: var(--dark-green);
   }
   
   @media screen and (max-width: 768px) {

@@ -81,7 +81,7 @@ function SinglePost() {
         </ul>
         {/*自身の投稿の場合は削除ボタンを表示させる。 そうでない場合は投稿したユーザー名を表示させる */}
         {isOwnRecipe ? (
-          <>
+          <div className={styles.button_wrapper}>
             <button
               onClick={async (e) => {
                 e.preventDefault();
@@ -105,7 +105,7 @@ function SinglePost() {
             >
               編集
             </button>
-          </>
+          </div>
         ) : (
           <div className={styles.avatar_wrapper}>
             <img
