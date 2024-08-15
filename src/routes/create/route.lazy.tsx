@@ -78,8 +78,33 @@ export function Create() {
     setCookingTIme(e.target.value);
   };
 
+  const validateIngredients = (
+    ingredients: {
+      name: string;
+      quantity: string;
+    }[]
+  ) => {
+    // 材料が1つもない場合はエラー
+    if (ingredients.length === 0) {
+      window.alert("材料の名前と量を入力してください");
+      return false;
+    }
+
+    // 各材料の名前と量が空でないかチェック
+    for (const ingredient of ingredients) {
+      if (ingredient.name === "" || ingredient.quantity === "") {
+        window.alert("材料の名前と量を両方とも入力してください");
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    // 材料のバリデーション
+    if (!validateIngredients(ingredients)) return;
     const formData = new FormData();
     formData.append("name", name);
     formData.append("process", process);
