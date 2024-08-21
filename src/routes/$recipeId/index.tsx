@@ -100,7 +100,7 @@ function SinglePost() {
             <button
               className={styles.edit_button}
               onClick={() => {
-                navigate({ to: "/$recipeId/edit" });
+                navigate({ to: "/$recipeId/edit", params });
               }}
             >
               編集

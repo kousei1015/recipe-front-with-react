@@ -14,9 +14,9 @@ export const Route = createLazyFileRoute("/$recipeId/edit")({
 });
 
 export function Index() {
-  const { recipeId } = useParams({ strict: false });
+  const { recipeId }= useParams({ experimental_returnIntersection: true, strict: false });
 
-  const { data: recipe, isSuccess } = useFetchRecipe(recipeId);
+  const { data: recipe, isSuccess } = useFetchRecipe(recipeId!);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [process, setProcess] = useState("");
@@ -133,7 +133,7 @@ export function Index() {
       formData.append("image", image);
     }
     formData.append("cooking_time", cookingTime);
-    await putMutation.mutateAsync({ id: recipeId, data: formData });
+    await putMutation.mutateAsync({ id: recipeId!, data: formData });
     navigate({
       to: "/",
     });
