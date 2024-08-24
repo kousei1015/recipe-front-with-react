@@ -2,6 +2,7 @@ import {
   useQuery,
   useMutation,
   useQueryClient,
+  keepPreviousData,
 } from "@tanstack/react-query";
 import { getRecipes } from "../api/getRecipes";
 import { fetchUserInfo } from "../api/fetchUserInfo";
@@ -19,6 +20,9 @@ import { setCookies } from "../utils/setCookies";
 import { patchProfile } from "../api/patchProfile";
 import { postRecipe } from "../api/postRecipe";
 import deleteRecipe from "../api/deleteRecipe";
+import { getRecipesByUser } from "../api/getRecipesByUser";
+import { putRecipe } from "../api/putRecipe";
+import { getAllRecipes } from "../api/getAllRecipes";
 
 export const usePostSignInData = () => {
   const queryClient = useQueryClient();
@@ -44,8 +48,19 @@ export const usePostSignUpData = () => {
   });
 };
 
-export const useFetchRecipes = () => {
-  return useQuery({queryKey: ["recipes"], queryFn: getRecipes})
+export const useFetchAllRecipes = () => {
+  return useQuery({
+    queryKey: ["allRecipes"],
+    queryFn: getAllRecipes
+  })
+}
+
+export const useFetchRecipes = (page: number, option: string) => {
+  return useQuery({
+    queryKey: ["recipes", page, option],
+    queryFn: () => getRecipes(page, option),
+    placeholderData: keepPreviousData,
+  });
 };
 
 export const useFetchAuthInfo = () => {
@@ -58,6 +73,16 @@ export const useFetchRecipe = (id: string) => {
 
 export const usePostRecipe = () => {
   return useMutation({ mutationFn: postRecipe });
+};
+
+export const usePutRecipe = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: putRecipe,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["recipes"] })
+    }
+  })
 };
 
 export const useDeleteRecipe = () => {
@@ -78,6 +103,13 @@ export const useFetchFollowers = () => {
   return useQuery({ queryKey: ["followers"], queryFn: getFollowers });
 };
 
+export const useFetchRecipesByUser = (id: string) => {
+  return useQuery({
+    queryKey: ["followerRecipes", id],
+    queryFn: () => getRecipesByUser(id),
+  });
+};
+
 export const useFetchFavoritesRecipes = () => {
   return useQuery({ queryKey: ["favoritesRecipes"], queryFn: getFavorites });
 };
@@ -92,39 +124,32 @@ export const usePostFavoriteRecipe = (id: string) => {
   });
 };
 
-export const useCancelFavRecipes = (
-  recipeId: string | undefined = undefined
-) => {
+export const useCancelFavRecipes = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteFavoriteRecipe,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
       queryClient.invalidateQueries({ queryKey: ["favoritesRecipes"] });
     },
   });
 };
 
-export const useFollow = (recipeId: string | undefined = undefined) => {
+export const useFollow = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: postFollow,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
     },
   });
 };
 
-export const useCancelFollowing = (
-  recipeId: string | undefined = undefined
-) => {
+export const useCancelFollowing = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteFollowing(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
-      queryClient.invalidateQueries({ queryKey: ["recipe", recipeId] });
     },
   });
 };

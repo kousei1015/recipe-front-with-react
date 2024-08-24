@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +7,7 @@ import { z } from "zod";
 import { usePatchProfile } from "../../hooks/useQueryHooks";
 import { ProfileEditProps } from "../../types";
 
-export const Route = createFileRoute("/profile")({
+export const Route = createLazyFileRoute("/profile")({
   component: ProfileEdit,
 });
 

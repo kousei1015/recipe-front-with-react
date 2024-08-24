@@ -11,8 +11,10 @@ import {
   usePostFavoriteRecipe,
 } from "../../hooks/useQueryHooks";
 import NoImage from "../../../public/NoImg.jpg";
+import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
+import NotFound from "../../components/NotFound";
 
-export const Route = createFileRoute("/$recipeId")({
+export const Route = createFileRoute("/$recipeId/")({
   component: SinglePost,
 });
 
@@ -21,29 +23,35 @@ function SinglePost() {
   const { useParams } = Route;
   const params = useParams();
 
-  const { data: recipe } = useFetchRecipe(params.recipeId);
+  const {
+    data: recipe,
+    refetch,
+    error: recipeError,
+  } = useFetchRecipe(params.recipeId);
 
-  const { data: authInfo } = useFetchAuthInfo();
+  const { data: authInfo, error: authError } = useFetchAuthInfo();
 
   const deleteRecipeMutation = useDeleteRecipe();
 
   const favoriteMutation = usePostFavoriteRecipe(recipe?.id!);
 
-  const unfavoriteMutation = useCancelFavRecipes(params.recipeId);
+  const unfavoriteMutation = useCancelFavRecipes();
 
-  const followMutation = useFollow(params.recipeId);
+  const followMutation = useFollow();
 
-  const unfollowMutation = useCancelFollowing(params.recipeId);
+  const unfollowMutation = useCancelFollowing();
 
-  if(!recipe || !authInfo) {
-    return <SkeletonRecipe />
+  if (recipeError || authError) {
+    return <NotFound />;
+  }
+  if (!recipe || !authInfo) {
+    return <SkeletonRecipe />;
   }
 
   const isLogin = authInfo!.is_login;
   const isOwnRecipe = recipe.user_id === authInfo!.user_id;
   const isFavorited = !!recipe.favorite_id;
   const isFollowed = !!recipe.follow_id;
-
 
   return (
     <div className={styles.wrapper}>
@@ -60,6 +68,7 @@ function SinglePost() {
         <div className={styles.process}>
           <p>{recipe.process}</p>
         </div>
+        <h2>所要時間: {getCookingTImeLabel(recipe.cooking_time)}</h2>
         <h3>材料</h3>
         <ul className={styles.ingredient_list}>
           {recipe?.ingredients?.map((ingredient) => {
@@ -72,17 +81,31 @@ function SinglePost() {
         </ul>
         {/*自身の投稿の場合は削除ボタンを表示させる。 そうでない場合は投稿したユーザー名を表示させる */}
         {isOwnRecipe ? (
-          <button
-            onClick={async (e) => {
-              e.preventDefault();
-              await deleteRecipeMutation.mutateAsync(params.recipeId);
-              navigate({
-                to: "/",
-              });
-            }}
-          >
-            削除
-          </button>
+          <div className={styles.button_wrapper}>
+            <button
+              onClick={async (e) => {
+                e.preventDefault();
+                const confirmed = window.confirm("このレシピを削除しますか？");
+                if (confirmed) {
+                  await deleteRecipeMutation.mutateAsync(params.recipeId);
+                  navigate({
+                    to: "/",
+                  });
+                }
+              }}
+            >
+              削除
+            </button>
+
+            <button
+              className={styles.edit_button}
+              onClick={() => {
+                navigate({ to: "/$recipeId/edit", params });
+              }}
+            >
+              編集
+            </button>
+          </div>
         ) : (
           <div className={styles.avatar_wrapper}>
             <img
@@ -103,7 +126,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfavoriteMutation.mutate(recipe.favorite_id as string);
+                  refetch();
                 }}
+                style={{ opacity: unfavoriteMutation.isPending ? 0.2 : 1 }}
               >
                 お気に入りを解除
               </button>
@@ -112,7 +137,9 @@ function SinglePost() {
                 onClick={async (e) => {
                   e.preventDefault();
                   favoriteMutation.mutate(recipe.id);
+                  refetch();
                 }}
+                style={{ opacity: favoriteMutation.isPending ? 0.2 : 1 }}
               >
                 保存
               </button>
@@ -127,7 +154,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   unfollowMutation.mutate(recipe?.follow_id as string);
+                  refetch();
                 }}
+                style={{ opacity: unfollowMutation.isPending ? 0.2 : 1 }}
               >
                 フォローを解除
               </button>
@@ -136,7 +165,9 @@ function SinglePost() {
                 onClick={(e) => {
                   e.preventDefault();
                   followMutation.mutate(recipe?.user_id);
+                  refetch();
                 }}
+                style={{ opacity: followMutation.isPending ? 0.2 : 1 }}
               >
                 フォロー
               </button>
@@ -147,3 +178,5 @@ function SinglePost() {
     </div>
   );
 }
+
+export default SinglePost;

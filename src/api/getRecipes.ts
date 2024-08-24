@@ -1,17 +1,35 @@
+import apiClient from "./apiClient";
+import { addAuthHeaders } from "./addAuthHeader";
 import { RECIPES } from "../types";
-import axios from "axios";
-import Cookies from "js-cookie";
 
-export async function getRecipes(): Promise<RECIPES> {
+export async function getRecipes(
+  pageParams: number,
+  orderType: string
+): Promise<RECIPES> {
+  let recipes = null;
+  try {
+    switch (orderType) {
+      case "cookingTimeSort":
+        recipes = await apiClient.get(
+          `/recipes?page=${pageParams}&sort_by=cooking_time&order=asc`,
+          {
+            headers: addAuthHeaders(),
+          }
+        );
+        break;
 
-  const headers = {
-    client: Cookies.get("client"),
-    uid: Cookies.get("uid"),
-    "access-token": Cookies.get("access-token"),
-  };
-  
-  const recipes = await axios.get("http://localhost:3000/v1/recipes.json", {
-    headers,
-  });
-  return recipes.data;
+      case "":
+        recipes = await apiClient.get(`/recipes.json?page=${pageParams}`, {
+          headers: addAuthHeaders(),
+        });
+        break;
+
+      default:
+        break;
+    }
+    return recipes?.data;
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    throw error;
+  }
 }

@@ -1,18 +1,20 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import imageCompression from "browser-image-compression";
 import { useState } from "react";
 import styles from "../../styles/Create.module.css";
 import { usePostRecipe } from "../../hooks/useQueryHooks";
 
-export const Route = createFileRoute("/create")({
+export const Route = createLazyFileRoute("/create")({
   component: Create,
 });
-function Create() {
+export function Create() {
   const postMutation = usePostRecipe();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [process, setProcess] = useState("");
   const [ingredients, setIngredients] = useState([{ name: "", quantity: "" }]);
   const [image, setImage] = useState<File | null>(null);
+  const [cookingTime, setCookingTIme] = useState("1");
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -54,15 +56,55 @@ function Create() {
     setIngredients(newIngredients);
   };
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files[0]) {
-      setImage(files[0]);
+      const file = files[0];
+      const options = {
+        maxSizeMB: 3,
+        maxWidthOrHeight: 1000,
+      };
+
+      try {
+        const compressedFile = await imageCompression(file, options);
+        setImage(compressedFile);
+      } catch (error) {
+        window.alert("エラーが発生しました。もう一度やり直してください");
+      }
     }
+  };
+
+  const handleCookTime = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCookingTIme(e.target.value);
+  };
+
+  const validateIngredients = (
+    ingredients: {
+      name: string;
+      quantity: string;
+    }[]
+  ) => {
+    // 材料が1つもない場合はエラー
+    if (ingredients.length === 0) {
+      window.alert("材料の名前と量を入力してください");
+      return false;
+    }
+
+    // 各材料の名前と量が空でないかチェック
+    for (const ingredient of ingredients) {
+      if (ingredient.name === "" || ingredient.quantity === "") {
+        window.alert("材料の名前と量を両方とも入力してください");
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    // 材料のバリデーション
+    if (!validateIngredients(ingredients)) return;
     const formData = new FormData();
     formData.append("name", name);
     formData.append("process", process);
@@ -74,7 +116,8 @@ function Create() {
     if (image) {
       formData.append("image", image);
     }
-    await postMutation.mutateAsync(formData)
+    formData.append("cooking_time", cookingTime);
+    await postMutation.mutateAsync(formData);
     navigate({
       to: "/",
     });
@@ -97,6 +140,15 @@ function Create() {
         cols={30}
         rows={10}
       ></textarea>
+
+      <p>所要時間</p>
+      <select name="cooking-time" onChange={handleCookTime}>
+        <option value="1">5分未満</option>
+        <option value="2">10分未満</option>
+        <option value="3">20分未満</option>
+        <option value="4">30分未満</option>
+        <option value="5">30分以上</option>
+      </select>
       {ingredients.map((ingredient, index) => (
         <div key={index}>
           <input
@@ -123,3 +175,5 @@ function Create() {
     </div>
   );
 }
+
+export default Create;
