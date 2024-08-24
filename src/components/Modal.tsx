@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import styles from "./Modal.module.css";
-import NoImage from "../../public/NoImg.jpg";
+import NoProfileImage from "../../public/UserIcon.webp";
 import { ModalProps } from "../types";
 import { clearAuthCookies } from "../utils/clearAuthCookies";
 import useModalStore from "../store/useModalStore";
@@ -12,8 +12,8 @@ const Modal = ({ user_name, avatar_url, refetch }: ModalProps) => {
       <div className={styles.content} onClick={(e) => e.stopPropagation()}>
         <div className={styles.avatar_wrapper}>
           <img
-            src={avatar_url || NoImage}
-            alt={avatar_url ? "アバター画像" : "画像なし"}
+            src={avatar_url || NoProfileImage}
+            alt={avatar_url ? "プロフィール画像" : "画像なし"}
             width={100}
             height={100}
           />

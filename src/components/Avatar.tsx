@@ -1,6 +1,6 @@
 import { AVATAR_PROPS } from "../types";
 import styles from "./Avatar.module.css"
-import NoImage from "../../public/NoImg.jpg"
+import NoProfileImage from "../../public/UserIcon.webp"
 import useModalStore from "../store/useModalStore";
 
 const Avatar = ({avatar_url}: AVATAR_PROPS) => {
@@ -8,8 +8,8 @@ const Avatar = ({avatar_url}: AVATAR_PROPS) => {
   return (
     <div className={styles.avatar} onClick={onOpen}>
       <img
-        src={avatar_url || NoImage}
-        alt={avatar_url ? "レシピ画像" : "画像なし"}
+        src={avatar_url || NoProfileImage}
+        alt={avatar_url ? "プロフィール画像" : "画像なし"}
         width={100}
         height={100}
       />

@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
-import NoImage from "../../../public/NoImg.jpg";
+import NoProfileImage from "../../../public/UserIcon.webp";
 import { useFetchFollowers } from "../../hooks/useQueryHooks";
 
 export const Route = createLazyFileRoute("/followers/")({
@@ -21,8 +21,8 @@ function Followers() {
               className={styles.link}
             >
               <img
-                src={follower.avatar_url || NoImage}
-                alt={follower.avatar_url ? "レシピ画像" : "画像なし"}
+                src={follower.avatar_url || NoProfileImage}
+                alt={follower.avatar_url ? "プロフィール画像" : "画像なし"}
                 width={100}
                 height={100}
               />
