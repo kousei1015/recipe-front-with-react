@@ -73,28 +73,6 @@ afterAll(() => {
 });
 
 describe("RecipeId Component", () => {
-  it("Firstly, should render skeleton component", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1",
-      component: () => <SinglePost />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1"] }),
-    });
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-
-    expect(router.state.location.pathname).toBe("/1");
-    await screen.findByTestId("skeletonTest");
-  });
-
   it("should render component", async () => {
     const rootRoute = createRootRoute();
     const detail = createRoute({

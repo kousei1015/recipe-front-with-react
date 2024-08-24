@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import styles from "../../styles/$recipeId.module.css";
-import SkeletonRecipe from "../../components/SkeletonRecipe";
 import {
   useDeleteRecipe,
   useCancelFavRecipes,
@@ -45,7 +44,7 @@ function SinglePost() {
     return <NotFound />;
   }
   if (!recipe || !authInfo) {
-    return <SkeletonRecipe />;
+    return
   }
 
   const isLogin = authInfo!.is_login;
