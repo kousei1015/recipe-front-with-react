@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import styles from "./Search.module.css";
 import Fuse from "fuse.js";
 import { SUGGESTED_RECIPES } from "../types";
-import NoImage from "../../public/NoImg.jpg";
+import NoImage from "../assets/NoImg.jpg";
 import { useSearchStore } from "../store/useSearchStore";
 
 const Search = ({ recipes }: { recipes: SUGGESTED_RECIPES | undefined }) => {
