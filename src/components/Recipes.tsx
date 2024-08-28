@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { RECIPES } from "../types";
 import styles from "./Recipes.module.css";
-import NoImage from "../../public/NoImg.jpg";
+import NoImage from "../assets/NoImg.jpg";
 import { getBackColorByTime } from "../utils/getBackColorByTime";
 import { getCookingTImeLabel } from "../utils/getCookingTimeLabel";
 

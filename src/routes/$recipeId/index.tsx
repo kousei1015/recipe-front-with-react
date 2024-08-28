@@ -9,7 +9,7 @@ import {
   useFollow,
   usePostFavoriteRecipe,
 } from "../../hooks/useQueryHooks";
-import NoImage from "../../../public/NoImg.jpg";
+import NoImage from "../../assets/NoImg.jpg";
 import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
 import NotFound from "../../components/NotFound";
 

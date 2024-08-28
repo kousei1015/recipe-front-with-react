@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import styles from "./FavoriteRecipes.module.css";
 import { useCancelFavRecipes } from "../hooks/useQueryHooks";
-import NoImage from "../../public/NoImg.jpg";
+import NoImage from "../assets/NoImg.jpg";
 import { FavRecipes } from "../types";
 import { getBackColorByTime } from "../utils/getBackColorByTime";
 import { getCookingTImeLabel } from "../utils/getCookingTimeLabel";
