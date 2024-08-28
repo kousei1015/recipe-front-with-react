@@ -1,14 +1,11 @@
-.avatar {
+.avatar_wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  cursor: pointer;
 }
 
-.avatar > img {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+.avatar_with_name_wrapper {
+  justify-content: center;
 }
 
 @media screen and (max-width: 500px) {

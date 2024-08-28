@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import styles from "./AuthHeader.module.css";
-import Avatar from "./Avatar";
+import { Avatar } from "./Avatar";
 import Modal from "./Modal";
 import { AUTH_HEADER_PROPS } from "../types";
 
