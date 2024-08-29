@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import Pagination from "../components/Pagination";
 import usePaginateStore from "../store/usePaginateStore";
 import useSelectForSort from "../store/useSelectForSort";
@@ -14,6 +15,7 @@ import Recipes from "../components/Recipes";
 import SkeletonRecipes from "../components/SkeletonRecipes";
 import SelectForSort from "../components/SelectForSort";
 import Search from "../components/Search";
+import useModalStore from "../store/useModalStore";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -26,8 +28,19 @@ function Index() {
 
   const { data: authInfo, refetch } = useFetchAuthInfo();
 
-  const { data: allRecipes } = useFetchAllRecipes();
+  const { data: allRecipes, isLoading: isLoadingAllRecipes } = useFetchAllRecipes();
 
+  const { isOpen, onClose } = useModalStore();
+
+  useEffect(() => {
+    // コンポーネントがアンマウントされる時にモーダルを閉じる
+    return () => {
+      if (isOpen) {
+        onClose();
+      }
+    };
+  }, []);
+  
   if (!recipes || !authInfo) {
     return <SkeletonRecipes />;
   }
@@ -48,7 +61,7 @@ function Index() {
 
       <h2 className={styles.heading}>レシピ一覧</h2>
 
-      <Search recipes={allRecipes}/>
+      {!isLoadingAllRecipes && <Search recipes={allRecipes} />}
 
       <SelectForSort />
 
