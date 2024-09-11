@@ -48,7 +48,7 @@ const handlers = [
       { status: 200 }
     );
   }),
-  http.get("http://localhost:3000/v1/users.json", () => {
+  http.get("http://localhost:3000/v1/users/current_user_info.json", () => {
     return HttpResponse.json(
       {
         is_login: false,
