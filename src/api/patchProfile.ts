@@ -1,8 +1,7 @@
 import apiClient from "./apiClient";
 import { addAuthHeaders } from "./addAuthHeader";
-import { ProfileEditProps } from "../types";
 
-export const patchProfile = async (data: ProfileEditProps) => {
+export const patchProfile = async (data: FormData) => {
   try {
     const res = await apiClient.patch("/auth", data, {
       headers: addAuthHeaders(),

@@ -39,8 +39,8 @@ function Index() {
         onClose();
       }
     };
-  }, []);
-  
+  }, [isOpen]);
+
   if (!recipes || !authInfo) {
     return <SkeletonRecipes />;
   }
