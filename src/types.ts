@@ -23,7 +23,7 @@ export type ModalProps = {
 
 export type ProfileEditProps = {
   name: string;
-  avatar: File;
+  avatar?: File;
 };
 
 export type RECIPEBASE = {
