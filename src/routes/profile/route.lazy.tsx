@@ -1,10 +1,10 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styles from "../../styles/Sign.module.css";
 import { z } from "zod";
-import { usePatchProfile } from "../../hooks/useQueryHooks";
+import { useFetchAuthInfo, usePatchProfile } from "../../hooks/useQueryHooks";
 import { ProfileEditProps } from "../../types";
 
 export const Route = createLazyFileRoute("/profile")({
@@ -16,18 +16,32 @@ const validationSchema = z.object({
 });
 
 function ProfileEdit() {
+  const { data: authInfo } = useFetchAuthInfo();
   const editProfileMutation = usePatchProfile();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ProfileEditProps>({
     mode: "onChange",
     resolver: zodResolver(validationSchema),
+    defaultValues: {
+      name: "",
+    },
   });
 
   const fileInput = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    // ユーザーがログイン状態ならば、既存の名前をセット
+    if (authInfo?.is_login) {
+      reset({
+        name: authInfo.user_name,
+      });
+    }
+  }, [authInfo, reset]);
 
   const { ref } = register("avatar");
 
@@ -50,6 +64,7 @@ function ProfileEdit() {
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
       <h2>プロフィール編集</h2>
       <input
+        data-testid="user-name"
         type="text"
         {...register("name")}
         placeholder="名前を入力してください"
@@ -62,6 +77,7 @@ function ProfileEdit() {
       )}
       <input
         type="file"
+        data-testid="avatar"
         ref={(e) => {
           ref(e);
           fileInput.current = e;
