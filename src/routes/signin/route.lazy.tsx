@@ -28,10 +28,18 @@ function SignIn () {
   });
 
   const onSubmit = async (data: SignInProps) => {
-    await postSignDataMutation.mutateAsync(data)
-    navigate({
-      to: "/"
-    })
+    try {
+      await postSignDataMutation.mutateAsync(data);
+      navigate({
+        to: "/",
+      });
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        window.alert("ログイン情報が正しくありません。再度お試しください。");
+      } else {
+        window.alert("エラーが発生しました。時間をおいて試してみてください");
+      }
+    }
   };
 
   return (
