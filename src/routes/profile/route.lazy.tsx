@@ -32,14 +32,19 @@ function ProfileEdit() {
   const { ref } = register("avatar");
 
   const onSubmit = async (data: ProfileEditProps) => {
-  
-    await editProfileMutation.mutateAsync(data)
-  
+    const formData = new FormData();
+
+    formData.append("name", data.name);
+
+    if (fileInput.current?.files?.[0]) {
+      formData.append("avatar", fileInput.current.files[0]);
+    }
+
+    await editProfileMutation.mutateAsync(formData);
     navigate({
       to: "/",
     });
   };
-  
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
