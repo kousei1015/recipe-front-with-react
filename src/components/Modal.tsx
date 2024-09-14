@@ -23,12 +23,12 @@ const Modal = ({ user_name, avatar_url, refetch }: ModalProps) => {
 
         <ul className={styles.links_list}>
           <li className={styles.links_item}>
-            <Link to="/followings">
+            <Link to="/myfollowings">
               <h3>フォロー中</h3>
             </Link>
           </li>
           <li className={styles.links_item}>
-            <Link to="/followers">
+            <Link to="/myfollowers">
               <h3>フォロワー</h3>
             </Link>
           </li>

@@ -6,7 +6,7 @@ import {
   useCancelFollowing,
 } from "../../hooks/useQueryHooks";
 
-export const Route = createLazyFileRoute("/followings/")({
+export const Route = createLazyFileRoute("/myfollowings/")({
   component: Followings,
 });
 
@@ -21,6 +21,7 @@ function Followings() {
       {followings ? (
         <UserList
           users={followings}
+          linkType="followed"
           onUnfollow={(id: string) => unfollowMutation.mutate(id)}
         />
       ) : null}

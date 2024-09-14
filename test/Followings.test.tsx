@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
-import Followings from "../src/routes/followings/index.lazy";
+import Followings from "../src/routes/myfollowings/index.lazy";
 import {
   createRouter,
   createRootRoute,
