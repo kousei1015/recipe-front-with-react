@@ -10,6 +10,9 @@ import { getRecipe } from "../api/getRecipe";
 import { getFollowings } from "../api/getFollowings";
 import { getFollowers } from "../api/getFollowers";
 import { getFavorites } from "../api/getFavorites";
+import { getFollowingsAndFollowers } from "../api/getFollowingsAndFollowers";
+import { getFollowingsByUser } from "../api/getFollowingsByUser";
+import { getFollowersByUser } from "../api/getFollowersByUser";
 import { deleteFavoriteRecipe } from "../api/deleteFavoriteRecipes";
 import { deleteFollowing } from "../api/deleteFollowing";
 import { postFollow } from "../api/postFollow";
@@ -80,9 +83,9 @@ export const usePutRecipe = () => {
   return useMutation({
     mutationFn: putRecipe,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recipes"] })
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ["recipes"] });
+    },
+  });
 };
 
 export const useDeleteRecipe = () => {
@@ -99,6 +102,20 @@ export const useFetchFollowings = () => {
   return useQuery({ queryKey: ["followings"], queryFn: getFollowings });
 };
 
+export const useFetchFollowingsByUser = (id: string) => {
+  return useQuery({
+    queryKey: ["followings", id],
+    queryFn: () => getFollowingsByUser(id),
+  });
+};
+
+export const useFetchFollowersByUser = (id: string) => {
+  return useQuery({
+    queryKey: ["followers", id],
+    queryFn: () => getFollowersByUser(id),
+  });
+};
+
 export const useFetchFollowers = () => {
   return useQuery({ queryKey: ["followers"], queryFn: getFollowers });
 };
@@ -107,6 +124,13 @@ export const useFetchRecipesByUser = (id: string) => {
   return useQuery({
     queryKey: ["followerRecipes", id],
     queryFn: () => getRecipesByUser(id),
+  });
+};
+
+export const useFetchFollowingsAndFollowers = (id: string) => {
+  return useQuery({
+    queryKey: ["followingsAndFollowers", id],
+    queryFn: () => getFollowingsAndFollowers(id),
   });
 };
 

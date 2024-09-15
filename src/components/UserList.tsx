@@ -6,14 +6,22 @@ import AvatarWithName from "./Avatar";
 type UserListProps = {
   users: FOLLOW;
   onUnfollow?: (id: string) => void;
+  linkType: "followed" | "follower";
 };
 
-export const UserList: React.FC<UserListProps> = ({ users, onUnfollow }) => {
+export const UserList: React.FC<UserListProps> = ({
+  users,
+  onUnfollow,
+  linkType
+}) => {
   return (
     <div className={styles.wrapper}>
       {users?.map((user) => (
         <div key={user.id} className={styles.follow_users}>
-          <Link to={`${user.followed_id}/recipes`} className={styles.link}>
+          <Link
+            to={`/${linkType === "followed" ? user.followed_id : user.follower_id}/recipes`}
+            className={styles.link}
+          >
             <AvatarWithName
               avatar_url={user.avatar_url}
               user_name={user.user_name}

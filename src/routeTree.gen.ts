@@ -15,8 +15,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as RecipeIdIndexImport } from './routes/$recipeId/index'
-import { Route as FollowingsFollowingsIdRecipesImport } from './routes/followings/$followingsId.recipes'
-import { Route as FollowersFollowersIdRecipesImport } from './routes/followers/$followersId.recipes'
 
 // Create Virtual Routes
 
@@ -25,9 +23,12 @@ const SigninRouteLazyImport = createFileRoute('/signin')()
 const ProfileRouteLazyImport = createFileRoute('/profile')()
 const FavoritesRouteLazyImport = createFileRoute('/favorites')()
 const CreateRouteLazyImport = createFileRoute('/create')()
-const FollowingsIndexLazyImport = createFileRoute('/followings/')()
-const FollowersIndexLazyImport = createFileRoute('/followers/')()
+const MyfollowingsIndexLazyImport = createFileRoute('/myfollowings/')()
+const MyfollowersIndexLazyImport = createFileRoute('/myfollowers/')()
+const UserIdRecipesLazyImport = createFileRoute('/$userId/recipes')()
 const RecipeIdEditLazyImport = createFileRoute('/$recipeId/edit')()
+const FollowIdFollowingsLazyImport = createFileRoute('/$followId/followings')()
+const FollowIdFollowersLazyImport = createFileRoute('/$followId/followers')()
 
 // Create/Update Routes
 
@@ -63,24 +64,31 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const FollowingsIndexLazyRoute = FollowingsIndexLazyImport.update({
-  path: '/followings/',
+const MyfollowingsIndexLazyRoute = MyfollowingsIndexLazyImport.update({
+  path: '/myfollowings/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/followings/index.lazy').then((d) => d.Route),
+  import('./routes/myfollowings/index.lazy').then((d) => d.Route),
 )
 
-const FollowersIndexLazyRoute = FollowersIndexLazyImport.update({
-  path: '/followers/',
+const MyfollowersIndexLazyRoute = MyfollowersIndexLazyImport.update({
+  path: '/myfollowers/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
-  import('./routes/followers/index.lazy').then((d) => d.Route),
+  import('./routes/myfollowers/index.lazy').then((d) => d.Route),
 )
 
 const RecipeIdIndexRoute = RecipeIdIndexImport.update({
   path: '/$recipeId/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const UserIdRecipesLazyRoute = UserIdRecipesLazyImport.update({
+  path: '/$userId/recipes',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/$userId/recipes.lazy').then((d) => d.Route),
+)
 
 const RecipeIdEditLazyRoute = RecipeIdEditLazyImport.update({
   path: '/$recipeId/edit',
@@ -89,17 +97,19 @@ const RecipeIdEditLazyRoute = RecipeIdEditLazyImport.update({
   import('./routes/$recipeId/edit.lazy').then((d) => d.Route),
 )
 
-const FollowingsFollowingsIdRecipesRoute =
-  FollowingsFollowingsIdRecipesImport.update({
-    path: '/followings/$followingsId/recipes',
-    getParentRoute: () => rootRoute,
-  } as any)
+const FollowIdFollowingsLazyRoute = FollowIdFollowingsLazyImport.update({
+  path: '/$followId/followings',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/$followId/followings.lazy').then((d) => d.Route),
+)
 
-const FollowersFollowersIdRecipesRoute =
-  FollowersFollowersIdRecipesImport.update({
-    path: '/followers/$followersId/recipes',
-    getParentRoute: () => rootRoute,
-  } as any)
+const FollowIdFollowersLazyRoute = FollowIdFollowersLazyImport.update({
+  path: '/$followId/followers',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/$followId/followers.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -129,28 +139,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupRouteLazyImport
       parentRoute: typeof rootRoute
     }
+    '/$followId/followers': {
+      preLoaderRoute: typeof FollowIdFollowersLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/$followId/followings': {
+      preLoaderRoute: typeof FollowIdFollowingsLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/$recipeId/edit': {
       preLoaderRoute: typeof RecipeIdEditLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/$userId/recipes': {
+      preLoaderRoute: typeof UserIdRecipesLazyImport
       parentRoute: typeof rootRoute
     }
     '/$recipeId/': {
       preLoaderRoute: typeof RecipeIdIndexImport
       parentRoute: typeof rootRoute
     }
-    '/followers/': {
-      preLoaderRoute: typeof FollowersIndexLazyImport
+    '/myfollowers/': {
+      preLoaderRoute: typeof MyfollowersIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/followings/': {
-      preLoaderRoute: typeof FollowingsIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/followers/$followersId/recipes': {
-      preLoaderRoute: typeof FollowersFollowersIdRecipesImport
-      parentRoute: typeof rootRoute
-    }
-    '/followings/$followingsId/recipes': {
-      preLoaderRoute: typeof FollowingsFollowingsIdRecipesImport
+    '/myfollowings/': {
+      preLoaderRoute: typeof MyfollowingsIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -165,12 +179,13 @@ export const routeTree = rootRoute.addChildren([
   ProfileRouteLazyRoute,
   SigninRouteLazyRoute,
   SignupRouteLazyRoute,
+  FollowIdFollowersLazyRoute,
+  FollowIdFollowingsLazyRoute,
   RecipeIdEditLazyRoute,
+  UserIdRecipesLazyRoute,
   RecipeIdIndexRoute,
-  FollowersIndexLazyRoute,
-  FollowingsIndexLazyRoute,
-  FollowersFollowersIdRecipesRoute,
-  FollowingsFollowingsIdRecipesRoute,
+  MyfollowersIndexLazyRoute,
+  MyfollowingsIndexLazyRoute,
 ])
 
 /* prettier-ignore-end */
