@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import styles from "./Modal.module.css";
-import { ModalProps } from "../types";
-import { clearAuthCookies } from "../utils/clearAuthCookies";
-import useModalStore from "../store/useModalStore";
-import AvatarWithName from "./Avatar";
+import { ModalProps } from "../../types";
+import { clearAuthCookies } from "../../utils/clearAuthCookies";
+import useModalStore from "../../store/useModalStore";
+import AvatarWithName from "../Avatar/Avatar";
+
 const Modal = ({ user_name, avatar_url, refetch }: ModalProps) => {
   const { isOpen, onClose } = useModalStore();
   return isOpen ? (

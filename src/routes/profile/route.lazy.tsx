@@ -2,10 +2,10 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import styles from "../../styles/Sign.module.css";
+import styles from "@/styles/Sign.module.css";
 import { z } from "zod";
-import { useFetchAuthInfo, usePatchProfile } from "../../hooks/useQueryHooks";
-import { ProfileEditProps } from "../../types";
+import { useFetchAuthInfo, usePatchProfile } from "@/hooks/useQueryHooks";
+import { ProfileEditProps } from "@/types";
 
 export const Route = createLazyFileRoute("/profile")({
   component: ProfileEdit,

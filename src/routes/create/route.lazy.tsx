@@ -1,8 +1,8 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import imageCompression from "browser-image-compression";
 import { useState } from "react";
-import styles from "../../styles/Create.module.css";
-import { usePostRecipe } from "../../hooks/useQueryHooks";
+import styles from "@/styles/Create.module.css";
+import { usePostRecipe } from "@/hooks/useQueryHooks";
 
 export const Route = createLazyFileRoute("/create")({
   component: Create,

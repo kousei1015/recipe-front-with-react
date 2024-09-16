@@ -1,4 +1,4 @@
-import useSelectForSort from "../store/useSelectForSort";
+import useSelectForSort from "@/store/useSelectForSort";
 import styles from "./SelectForSort.module.css";
 const SelectForSort = () => {
   const { changeOrderType } = useSelectForSort();

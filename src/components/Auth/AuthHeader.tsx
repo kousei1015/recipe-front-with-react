@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import styles from "./AuthHeader.module.css";
-import { Avatar } from "./Avatar";
-import Modal from "./Modal";
-import { AUTH_HEADER_PROPS } from "../types";
+import { Avatar } from "../Avatar/Avatar";
+import Modal from "../Modal/Modal";
+import { AUTH_HEADER_PROPS } from "@/types";
 
 const AuthHeader = ({ avatar_url, user_name, refetch }: AUTH_HEADER_PROPS) => {
   return (

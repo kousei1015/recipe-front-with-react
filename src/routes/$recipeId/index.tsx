@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import styles from "../../styles/$recipeId.module.css";
+import styles from "@/styles/$recipeId.module.css"
 import {
  useDeleteRecipe,
  useCancelFavRecipes,
@@ -8,11 +8,11 @@ import {
  useFetchRecipe,
  useFollow,
  usePostFavoriteRecipe,
-} from "../../hooks/useQueryHooks";
-import NoImage from "../../assets/NoImg.jpg";
-import { getCookingTImeLabel } from "../../utils/getCookingTimeLabel";
-import NotFound from "../../components/NotFound";
-import AvatarWithName from "../../components/Avatar";
+} from "@/hooks/useQueryHooks";
+import NoImage from "@/assets/NoImg.jpg";
+import { getCookingTImeLabel } from "@/utils/getCookingTimeLabel";
+import NotFound from "@/components/Common/NotFound";
+import AvatarWithName from "@/components/Avatar/Avatar";
 
 export const Route = createFileRoute("/$recipeId/")({
  component: SinglePost,

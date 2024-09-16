@@ -1,5 +1,5 @@
 import React from "react";
-import NoProfileImage from "../assets/UserIcon.webp";
+import NoProfileImage from "@/assets/UserIcon.webp";
 import styles from "./AvatarImage.module.css";
 
 interface AvatarImageProps {

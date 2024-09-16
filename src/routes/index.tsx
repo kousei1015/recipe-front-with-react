@@ -1,21 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
-import Pagination from "../components/Pagination";
-import usePaginateStore from "../store/usePaginateStore";
-import useSelectForSort from "../store/useSelectForSort";
+import Pagination from "@/components/Pagination/Pagination"
+import usePaginateStore from "@/store/usePaginateStore";
+import useSelectForSort from "@/store/useSelectForSort";
 import {
   useFetchRecipes,
   useFetchAuthInfo,
   useFetchAllRecipes,
-} from "../hooks/useQueryHooks";
+} from "@/hooks/useQueryHooks";
 import styles from "./index.module.css";
-import AuthHeader from "../components/AuthHeader";
-import NoAuthHeader from "../components/NoAuthHeader";
-import Recipes from "../components/Recipes";
-import SkeletonRecipes from "../components/SkeletonRecipes";
-import SelectForSort from "../components/SelectForSort";
-import Search from "../components/Search";
-import useModalStore from "../store/useModalStore";
+import AuthHeader from "@/components/Auth/AuthHeader";
+import NoAuthHeader from "@/components/Auth/NoAuthHeader";
+import Recipes from "@/components/Recipes/Recipes";
+import SkeletonRecipes from "@/components/Recipes/SkeletonRecipes";
+import SelectForSort from "@/components/Search/SelectForSort";
+import Search from "@/components/Search/Search";
+import useModalStore from "@/store/useModalStore";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -28,7 +28,8 @@ function Index() {
 
   const { data: authInfo, refetch } = useFetchAuthInfo();
 
-  const { data: allRecipes, isLoading: isLoadingAllRecipes } = useFetchAllRecipes();
+  const { data: allRecipes, isLoading: isLoadingAllRecipes } =
+    useFetchAllRecipes();
 
   const { isOpen, onClose } = useModalStore();
 
@@ -65,7 +66,7 @@ function Index() {
 
       <SelectForSort />
 
-      <Recipes recipes={recipes} />
+      <Recipes recipes={recipes.data} />
 
       <Pagination recipes={recipes} />
     </>

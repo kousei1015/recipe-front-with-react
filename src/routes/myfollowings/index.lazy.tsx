@@ -1,10 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import styles from "../../styles/Follow.module.css";
-import { FollowingsList } from "../../components/UserList/FollowingsList";
+import styles from "@/styles/Follow.module.css";
+import { FollowingsList } from "@/components/Follow/FollowingsList";
 import {
   useFetchFollowings,
   useFetchAuthInfo,
-} from "../../hooks/useQueryHooks";
+} from "@/hooks/useQueryHooks";
 
 export const Route = createLazyFileRoute("/myfollowings/")({
   component: Followings,

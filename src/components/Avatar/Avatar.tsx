@@ -1,7 +1,7 @@
-import { AVATAR_PROPS } from "../types";
+import { AVATAR_PROPS } from "@/types";
 import styles from "./Avatar.module.css";
 import { ClickableAvatarImage, NonClickableAvatarImage } from "./AvatarImage";
-import useModalStore from "../store/useModalStore";
+import useModalStore from "@/store/useModalStore";
 
 export const Avatar = ({ avatar_url }: AVATAR_PROPS) => {
   const { onOpen } = useModalStore();

@@ -2,9 +2,9 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { usePostSignInData } from "../../hooks/useQueryHooks";
-import styles from "../../styles/Sign.module.css"
-import { SignInProps } from "../../types";
+import { usePostSignInData } from "@/hooks/useQueryHooks";
+import styles from "@/styles/Sign.module.css"
+import { SignInProps } from "@/types";
 
 export const Route = createLazyFileRoute("/signin")({
   component: SignIn,

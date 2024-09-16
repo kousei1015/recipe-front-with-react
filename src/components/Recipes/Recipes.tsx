@@ -1,15 +1,14 @@
 import { Link } from "@tanstack/react-router";
-import { RECIPES } from "../types";
+import { RECIPES } from "@/types";
 import styles from "./Recipes.module.css";
-import NoImage from "../assets/NoImg.jpg";
-import { getBackColorByTime } from "../utils/getBackColorByTime";
-import { getCookingTImeLabel } from "../utils/getCookingTimeLabel";
+import NoImage from "@/assets/NoImg.jpg";
+import { getBackColorByTime } from "@/utils/getBackColorByTime";
+import { getCookingTImeLabel } from "@/utils/getCookingTimeLabel";
 
-const Recipes = ({ recipes }: { recipes: RECIPES }) => {
-  console.log(recipes.data);
+const Recipes = ({ recipes }: { recipes: RECIPES["data"] }) => {
   return (
     <div className={styles.recipe_wrapper}>
-      {recipes?.data?.map((recipe) => (
+      {recipes?.map((recipe) => (
         <article key={recipe.id} className={styles.recipe}>
           <Link to={`/${recipe.id}`}>
             <div className={styles.img_wrapper}>

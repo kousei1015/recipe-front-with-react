@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import styles from "../../styles/Follow.module.css";
-import { useFollow, useCancelFollowing } from "../../hooks/useQueryHooks";
-import { FOLLOW } from "../../types";
-import AvatarWithName from "../Avatar";
+import styles from "@/styles/Follow.module.css";
+import { useFollow, useCancelFollowing } from "@/hooks/useQueryHooks";
+import { FOLLOW } from "@/types";
+import AvatarWithName from "../Avatar/Avatar";
 
 type UserListProps = {
   users: FOLLOW;
