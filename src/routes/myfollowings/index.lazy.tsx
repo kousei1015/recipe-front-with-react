@@ -3,7 +3,6 @@ import styles from "../../styles/Follow.module.css";
 import { FollowingsList } from "../../components/UserList/FollowingsList";
 import {
   useFetchFollowings,
-  useCancelFollowing,
   useFetchAuthInfo,
 } from "../../hooks/useQueryHooks";
 
@@ -14,7 +13,7 @@ export const Route = createLazyFileRoute("/myfollowings/")({
 function Followings() {
   const { data: followings } = useFetchFollowings();
   const { data: myUser } = useFetchAuthInfo();
-  
+
   return (
     <div className={styles.wrapper}>
       <h2>フォロー中</h2>
