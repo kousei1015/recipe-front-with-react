@@ -23,7 +23,7 @@ function SignIn () {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInProps>({
-    mode: "onChange",
+    mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
 
