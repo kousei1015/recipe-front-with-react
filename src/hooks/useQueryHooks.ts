@@ -10,7 +10,7 @@ import { getRecipe } from "../api/getRecipe";
 import { getFollowings } from "../api/getFollowings";
 import { getFollowers } from "../api/getFollowers";
 import { getFavorites } from "../api/getFavorites";
-import { getFollowingsAndFollowers } from "../api/getFollowingsAndFollowers";
+import { getUserInfoByParams } from "../api/getUserInfoByParams";
 import { getFollowingsByUser } from "../api/getFollowingsByUser";
 import { getFollowersByUser } from "../api/getFollowersByUser";
 import { deleteFavoriteRecipe } from "../api/deleteFavoriteRecipes";
@@ -127,10 +127,10 @@ export const useFetchRecipesByUser = (id: string) => {
   });
 };
 
-export const useFetchFollowingsAndFollowers = (id: string) => {
+export const useFetchUserInfoByParams = (id: string) => {
   return useQuery({
-    queryKey: ["followingsAndFollowers", id],
-    queryFn: () => getFollowingsAndFollowers(id),
+    queryKey: ["userInfoByParams", id],
+    queryFn: () => getUserInfoByParams(id),
   });
 };
 

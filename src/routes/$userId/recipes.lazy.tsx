@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import {
   useFetchRecipesByUser,
-  useFetchFollowingsAndFollowers,
+  useFetchUserInfoByParams,
 } from "../../hooks/useQueryHooks";
 import Recipes from "../../components/Recipes";
 import SkeletonRecipes from "../../components/SkeletonRecipes";
@@ -16,7 +16,7 @@ function RecipesByUser() {
   const { useParams } = Route;
   const params = useParams();
   const { data: recipes, isLoading } = useFetchRecipesByUser(params.userId);
-  const { data: userInfo, isLoading: userInfoLoading } = useFetchFollowingsAndFollowers(params.userId);
+  const { data: userInfo, isLoading: userInfoLoading } = useFetchUserInfoByParams(params.userId);
   if (isLoading || userInfoLoading) {
     return <SkeletonRecipes />;
   }

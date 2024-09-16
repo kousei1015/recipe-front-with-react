@@ -7,7 +7,7 @@ type UserInfo = {
     followers_count: number;
 }
 
-export async function getFollowingsAndFollowers(id: string): Promise<UserInfo> {
+export async function getUserInfoByParams(id: string): Promise<UserInfo> {
   try {
     const followers = await apiClient.get(`/users/${id}.json`);
     return followers.data;
