@@ -1,7 +1,7 @@
 import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
-import Followings from "../src/routes/followings/index.lazy";
+import Followings from "../src/routes/myfollowings/index.lazy";
 import {
   createRouter,
   createRootRoute,
@@ -33,6 +33,7 @@ export const handlers = [
           followed_id: 2,
           user_name: "test_user",
           avatar_url: null,
+          already_following: true
         },
       ],
       { status: 200 }
