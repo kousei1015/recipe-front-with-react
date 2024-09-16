@@ -4,7 +4,6 @@ import {
   useFetchUserInfoByParams,
 } from "@/hooks/useQueryHooks";
 import Recipes from "@/components/Recipes/Recipes";
-import SkeletonRecipes from "@/components/Recipes/SkeletonRecipes";
 import Wrapper from "@/components/Common/Wrapper";
 import { FollowLinks } from "@/components/Follow/FollowLinks";
 
@@ -15,16 +14,10 @@ export const Route = createLazyFileRoute("/$userId/recipes")({
 function RecipesByUser() {
   const { useParams } = Route;
   const params = useParams();
-  const { data: recipes, isLoading } = useFetchRecipesByUser(params.userId);
-  const { data: userInfo, isLoading: userInfoLoading } =
-    useFetchUserInfoByParams(params.userId);
-  if (isLoading || userInfoLoading) {
-    return <SkeletonRecipes />;
-  }
+  const { data: recipes, isLoading: recipesLoading } = useFetchRecipesByUser(params.userId);
+  const { data: userInfo, isLoading: userLoading } = useFetchUserInfoByParams(params.userId);
 
-  if (!recipes) {
-    return <h2>レシピはありません</h2>;
-  }
+  if(recipesLoading || userLoading) return
   return (
     <Wrapper>
       <h2>{userInfo?.name}さんの投稿</h2>
@@ -33,7 +26,7 @@ function RecipesByUser() {
         followersCount={userInfo?.followers_count as number}
         followingsCount={userInfo?.followings_count as number}
       />
-      <Recipes recipes={recipes.data} />
+      {recipes?.data ? <Recipes recipes={recipes.data} /> : "投稿されたレシピはありません"}
     </Wrapper>
   );
 }
