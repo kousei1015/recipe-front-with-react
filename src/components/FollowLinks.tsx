@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-
+import styles from "./FollowLinks.module.css"
 type FollowLinksProps = {
   userId: string;
   followingsCount: number;
@@ -12,7 +12,7 @@ export const FollowLinks: React.FC<FollowLinksProps> = ({
   followersCount,
 }) => {
   return (
-    <ul>
+    <ul className={styles.links}>
       <Link to={`/${userId}/followings`}>
         <li>フォロー中 {followingsCount}</li>
       </Link>
