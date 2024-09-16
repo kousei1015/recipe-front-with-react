@@ -164,6 +164,7 @@ export const useFollow = () => {
     mutationFn: postFollow,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
+      queryClient.invalidateQueries({ queryKey: ["followers"] });
     },
   });
 };
@@ -174,6 +175,7 @@ export const useCancelFollowing = () => {
     mutationFn: (id: string) => deleteFollowing(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
+      queryClient.invalidateQueries({ queryKey: ["followers"] });
     },
   });
 };
