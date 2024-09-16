@@ -1,7 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
-import { useFetchFollowingsByUser } from "../../hooks/useQueryHooks";
-import { UserList } from "../../components/UserList";
+import {
+  useFetchAuthInfo,
+  useFetchUserInfoByParams,
+  useFetchFollowingsByUser,
+} from "../../hooks/useQueryHooks";
+import { FollowingsList } from "../../components/UserList/FollowingsList";
 
 export const Route = createLazyFileRoute("/$followId/followings")({
   component: Followings,
@@ -10,12 +14,17 @@ export const Route = createLazyFileRoute("/$followId/followings")({
 function Followings() {
   const { useParams } = Route;
   const params = useParams();
-  const { data: followings } = useFetchFollowingsByUser(params.followId);
-
+  const { data: paramsUserFollowings } = useFetchFollowingsByUser(params.followId);
+  const { data: myUser } = useFetchAuthInfo();
+  const { data: paramsUser } = useFetchUserInfoByParams(params.followId);
+  
   return (
     <div className={styles.wrapper}>
+      <h2>{paramsUser?.name}</h2>
       <h2>フォロー中</h2>
-      {followings ? <UserList users={followings} linkType="followed"/> : null}
+      {paramsUserFollowings ? (
+        <FollowingsList users={paramsUserFollowings} loginUserId={myUser?.user_id} />
+      ) : null}
     </div>
   );
 }

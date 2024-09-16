@@ -1,10 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
 import {
+  useFetchAuthInfo,
   useFetchFollowersByUser,
-  useFetchFollowingsAndFollowers,
+  useFetchUserInfoByParams,
 } from "../../hooks/useQueryHooks";
-import { UserList } from "../../components/UserList";
+import { FollowersList } from "../../components/UserList/FollowersList";
 
 export const Route = createLazyFileRoute("/$followId/followers")({
   component: Followers,
@@ -13,13 +14,16 @@ export const Route = createLazyFileRoute("/$followId/followers")({
 function Followers() {
   const { useParams } = Route;
   const params = useParams();
-  const { data: followers } = useFetchFollowersByUser(params.followId);
-  const { data: userInfo } = useFetchFollowingsAndFollowers(params.followId);
+  const { data: paramsUserFollowers } = useFetchFollowersByUser(params.followId);
+  const { data: myUser } = useFetchAuthInfo();
+  const { data: paramsUser } = useFetchUserInfoByParams(params.followId);
   return (
     <div className={styles.wrapper}>
-      <h2>{userInfo?.name}</h2>
+      <h2>{paramsUser?.name}</h2>
       <h2>フォロワー</h2>
-      {followers ? <UserList users={followers} linkType="follower" /> : null}
+      {paramsUserFollowers ? (
+        <FollowersList users={paramsUserFollowers} loginUserId={myUser?.user_id} />
+      ) : null}
     </div>
   );
 }

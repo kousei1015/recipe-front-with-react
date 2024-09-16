@@ -1,9 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import styles from "../../styles/Follow.module.css";
-import { UserList } from "../../components/UserList";
+import { FollowingsList } from "../../components/UserList/FollowingsList";
 import {
   useFetchFollowings,
   useCancelFollowing,
+  useFetchAuthInfo,
 } from "../../hooks/useQueryHooks";
 
 export const Route = createLazyFileRoute("/myfollowings/")({
@@ -12,18 +13,13 @@ export const Route = createLazyFileRoute("/myfollowings/")({
 
 function Followings() {
   const { data: followings } = useFetchFollowings();
-
-  const unfollowMutation = useCancelFollowing();
-
+  const { data: myUser } = useFetchAuthInfo();
+  
   return (
     <div className={styles.wrapper}>
       <h2>フォロー中</h2>
       {followings ? (
-        <UserList
-          users={followings}
-          linkType="followed"
-          onUnfollow={(id: string) => unfollowMutation.mutate(id)}
-        />
+        <FollowingsList users={followings} loginUserId={myUser?.user_id} />
       ) : null}
     </div>
   );
