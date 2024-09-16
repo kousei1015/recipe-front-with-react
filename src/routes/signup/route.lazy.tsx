@@ -32,7 +32,7 @@ function SignUp () {
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpProps>({
-    mode: "onChange",
+    mode: "onBlur",
     resolver: zodResolver(validationSchema),
   });
 
