@@ -81,14 +81,30 @@ describe("SignUp Component", () => {
     const passwordInput =
       screen.getByPlaceholderText("passwordを入力してください");
 
-    await userEvent.type(emailInput, "dummy");
-    await userEvent.type(passwordInput, "dummy");
-    screen.debug();
-    expect(
-      screen.getByText("正しいメールアドレスを入力して下さい")
-    ).toBeTruthy();
-    expect(
-      screen.getByText("パスワードは6文字以上入力して下さい")
-    ).toBeTruthy();
+      await userEvent.type(emailInput, "dummy");
+
+      // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
+      expect(screen.queryByText("正しいメールアドレスを入力して下さい")).toBeNull();
+      
+      // フォーカスを外す
+      await userEvent.tab()
+      
+      // フォーカスを外した後は、エラーメッセージが表示されることを確認
+      expect(
+        screen.getByText("正しいメールアドレスを入力して下さい")
+      ).toBeTruthy();
+  
+      await userEvent.type(passwordInput, "dummy");
+  
+      // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
+      expect(screen.queryByText("パスワードは6文字以上入力して下さい")).toBeNull();
+      
+      // フォーカスを外す
+      await userEvent.tab()
+      
+      // フォーカスを外した後は、エラーメッセージが表示されることを確認
+      expect(
+        screen.getByText("パスワードは6文字以上入力して下さい")
+      ).toBeTruthy();
   });
 });
