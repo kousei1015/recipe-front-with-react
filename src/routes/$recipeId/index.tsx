@@ -149,7 +149,7 @@ function SinglePost() {
              <button
                onClick={(e) => {
                  e.preventDefault();
-                 unfollowMutation.mutate(recipe?.follow_id as string);
+                 unfollowMutation.mutate(recipe?.user_id as string);
                  refetch();
                }}
                style={{ opacity: unfollowMutation.isPending ? 0.2 : 1 }}
