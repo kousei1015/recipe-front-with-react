@@ -1,8 +1,8 @@
 import apiClient from "./apiClient";
 import { addAuthHeaders } from "./addAuthHeader";
-import { FavRecipes } from "../types";
+import { RECIPES } from "../types";
 
-export async function getFavorites(): Promise<FavRecipes> {
+export async function getFavorites(): Promise<RECIPES["data"]> {
   try {
     const recipes = await apiClient.get("/favorites.json", {
       headers: addAuthHeaders(),
