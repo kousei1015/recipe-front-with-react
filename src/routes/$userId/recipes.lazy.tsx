@@ -32,7 +32,7 @@ function RecipesByUser() {
         followersCount={userInfo?.followers_count as number}
         followingsCount={userInfo?.followings_count as number}
       />
-      <Recipes recipes={recipes} />
+      <Recipes recipes={recipes.data} />
     </Wrapper>
   );
 }

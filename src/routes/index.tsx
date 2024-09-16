@@ -65,7 +65,7 @@ function Index() {
 
       <SelectForSort />
 
-      <Recipes recipes={recipes} />
+      <Recipes recipes={recipes.data} />
 
       <Pagination recipes={recipes} />
     </>
