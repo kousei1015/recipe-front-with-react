@@ -33,6 +33,7 @@ export const handlers = [
           followed_id: 2,
           user_name: "test_user",
           avatar_url: null,
+          already_following: true
         },
       ],
       { status: 200 }
