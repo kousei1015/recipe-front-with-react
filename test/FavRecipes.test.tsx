@@ -27,13 +27,9 @@ export const handlers = [
     return HttpResponse.json(
       [
         {
-          favorite_id: 1,
           recipe_id: 1,
           recipe_name: "test_name",
           image_url: null,
-          user_id: 2,
-          user_name: "test_user",
-          avatar_url: null,
         },
       ],
       { status: 200 }
@@ -75,7 +71,6 @@ describe("FavRecipes Component", () => {
 
     await screen.findByText("test_name");
     screen.getByText("保存済みレシピ");
-    screen.getByText("ユーザー名: test_user");
-    screen.getByText("お気に入りを解除");
+    screen.getByText("test_name");
   });
 });
