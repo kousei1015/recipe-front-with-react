@@ -40,7 +40,12 @@
 }
 
 .links_item {
-  padding: 0.5rem;
+  padding: 0.75rem;
+  font-weight: 600;
+}
+
+.links_item:nth-child(3) {
+  padding-bottom: 2rem;
 }
 
 @media screen and (max-width: 768px) {
