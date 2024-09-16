@@ -5,9 +5,9 @@ import {
 } from "@tanstack/react-router";
 import imageCompression from "browser-image-compression";
 import { useState, useEffect } from "react";
-import styles from "../../styles/Create.module.css";
-import { useFetchRecipe } from "../../hooks/useQueryHooks";
-import { usePutRecipe } from "../../hooks/useQueryHooks";
+import styles from "@/styles/Create.module.css";
+import { useFetchRecipe } from "@/hooks/useQueryHooks";
+import { usePutRecipe } from "@/hooks/useQueryHooks";
 
 export const Route = createLazyFileRoute("/$recipeId/edit")({
   component: Index,

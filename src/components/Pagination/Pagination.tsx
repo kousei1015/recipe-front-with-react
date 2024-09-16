@@ -1,7 +1,7 @@
 import styles from "./Pagination.module.css";
-import usePaginateStore from "../store/usePaginateStore";
-import usePagination from "../hooks/usePagination";
-import { RECIPES } from "../types";
+import usePaginateStore from "@/store/usePaginateStore";
+import usePagination from "@/hooks/usePagination";
+import { RECIPES } from "@/types";
 
 const Pagination = ({ recipes }: { recipes: RECIPES }) => {
   const { page, clickPage } = usePaginateStore();
