@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import styles from "@/styles/$recipeId.module.css"
 import {
   useDeleteRecipe,
@@ -112,10 +112,14 @@ function SinglePost() {
               </button>
             </div>
           ) : (
-              <AvatarWithName
-                avatar_url={recipe.avatar_url}
-                user_name={recipe.user_name}
-              />
+            <div>
+              <Link to={`/${recipe.user_id}/recipes`} className={styles.link}>
+                <AvatarWithName
+                  avatar_url={recipe.avatar_url}
+                  user_name={recipe.user_name}
+                />
+              </Link>
+            </div>
           )}
 
           {/*ログインしていて、かつ既にレシピがお気に入り済みの場合はお気に入りを解除させる そうでない場合は保存させる */}
