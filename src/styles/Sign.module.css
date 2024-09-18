@@ -30,4 +30,5 @@
 
 .error {
     color: var(--red);
+    padding-bottom: 2.5rem;
 }

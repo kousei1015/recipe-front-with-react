@@ -12,6 +12,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
+import userEvent from "@testing-library/user-event";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -95,8 +96,10 @@ describe("RecipeId Component", () => {
     await router.load();
     await screen.findByText("test_name");
     screen.getByText("test_user");
-    screen.getByText("test1 100g");
-    screen.getByText("test2 100cc");
+    screen.getByText("test1");
+    screen.getByText("100g");
+    screen.getByText("test2");
+    screen.getByText("100cc");
     screen.getByText("所要時間: 10分未満");
   });
 });

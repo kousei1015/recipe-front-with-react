@@ -45,6 +45,7 @@ function SignIn () {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
       <h2>ログインフォーム</h2>
+      <p>Eメールを入力してください</p>
       <input
         type="text"
         {...register("email")}
@@ -56,6 +57,7 @@ function SignIn () {
           {errors.email?.message}
         </p>
       )}
+      <p>パスワードを入力してください</p>
       <input
         type="password"
         {...register("password")}
