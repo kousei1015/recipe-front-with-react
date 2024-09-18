@@ -47,6 +47,7 @@ function SignUp () {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
       <h2>新規登録</h2>
+      <p>Eメールアドレスを入力してください</p>
       <input
         type="text"
         {...register("email")}
@@ -57,6 +58,7 @@ function SignUp () {
           {errors.email?.message}
         </p>
       )}
+      <p>パスワードを入力してください</p>
       <input
         type="password"
         {...register("password")}
@@ -67,6 +69,7 @@ function SignUp () {
           {errors.password?.message}
         </p>
       )}
+      <p>パスワード確認用</p>
       <input
         type="password"
         {...register("password_confirmation")}
@@ -77,6 +80,7 @@ function SignUp () {
           {errors.password_confirmation.message}
         </p>
       )}
+      <p>ユーザー名を入力してください</p>
       <input
         type="text"
         {...register("name")}
