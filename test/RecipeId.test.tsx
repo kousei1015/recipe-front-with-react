@@ -102,4 +102,28 @@ describe("RecipeId Component", () => {
     screen.getByText("100cc");
     screen.getByText("所要時間: 10分未満");
   });
+
+  it("should navigate to the user's recipes when clicking on the user", async () => {
+    const rootRoute = createRootRoute();
+    const detail = createRoute({
+      getParentRoute: () => rootRoute,
+      path: "/1",
+      component: () => <SinglePost />,
+    });
+    const router = createRouter({
+      routeTree: rootRoute.addChildren([detail]),
+      history: createMemoryHistory({ initialEntries: ["/1"] }),
+    });
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    );
+
+    expect(router.state.location.pathname).toBe("/1");
+    await screen.findByText("test_user");
+    await userEvent.click(screen.getByText("test_user"));
+    expect(router.state.location.pathname).toBe("/2/recipes");
+  });
 });
