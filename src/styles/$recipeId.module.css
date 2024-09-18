@@ -96,7 +96,10 @@
   }
   .ingredient_list {
     margin: 0;
-    padding: 0;
+    padding: 0 0 1rem;
+  }
+  .button_wrapper {
+    justify-content: left;
   }
 }
 @media screen and (max-width: 768px) {
