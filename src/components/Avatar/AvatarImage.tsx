@@ -6,7 +6,7 @@ interface AvatarImageProps {
   avatar_url: string;
 }
 
-export const ClickableAvatarImage: React.FC<AvatarImageProps> = ({ avatar_url }) => {
+export const AvatarImage: React.FC<AvatarImageProps> = ({ avatar_url }) => {
   return (
     <img
       src={avatar_url || NoProfileImage}
@@ -17,15 +17,3 @@ export const ClickableAvatarImage: React.FC<AvatarImageProps> = ({ avatar_url })
     />
   );
 };
-
-export const NonClickableAvatarImage: React.FC<AvatarImageProps> = ({ avatar_url }) => {
-    return (
-      <img
-        src={avatar_url || NoProfileImage}
-        alt={avatar_url ? "プロフィール画像" : "画像なし"}
-        width={100}
-        height={100}
-        className={styles.avatar_img}
-      />
-    );
-  };
