@@ -73,24 +73,32 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/1"]) => {
+  const rootRoute = createRootRoute();
+
+  const detailRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/$recipeId",
+    component: SinglePost,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([detailRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("RecipeId Component", () => {
   it("should render component", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1",
-      component: () => <SinglePost />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1"] }),
-    });
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    const { router } = setupTestRouter();
 
     expect(router.state.location.pathname).toBe("/1");
     await router.load();
@@ -104,22 +112,7 @@ describe("RecipeId Component", () => {
   });
 
   it("should navigate to the user's recipes when clicking on the user", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1",
-      component: () => <SinglePost />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1"] }),
-    });
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    const { router } = setupTestRouter();
 
     expect(router.state.location.pathname).toBe("/1");
     await screen.findByText("test_user");

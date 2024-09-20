@@ -33,9 +33,15 @@ export const handlers = [
           followed_id: 2,
           user_name: "test_user",
           avatar_url: null,
-          already_following: true
+          already_following: true,
         },
       ],
+      { status: 200 }
+    );
+  }),
+  http.get("http://localhost:3000/v1/users/current_user_info.json", () => {
+    return HttpResponse.json(
+      { is_login: true, user_id: 1, user_name: "me", avatar_url: "" },
       { status: 200 }
     );
   }),
@@ -54,24 +60,31 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/myfollowings"]) => {
+  const rootRoute = createRootRoute();
+  const followingsRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/myfollowings",
+    component: () => <Followings />,
+  });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([followingsRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("Followings Component", () => {
   it("should render followings commponent", async () => {
-    const rootRoute = createRootRoute();
-    const favoriteRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/followings",
-      component: () => <Followings />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([favoriteRoute]),
-      history: createMemoryHistory({ initialEntries: ["/followings"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("test_user");
     screen.getByText("フォロー中");
     screen.getByText("フォローを解除");

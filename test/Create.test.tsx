@@ -70,26 +70,33 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/create"]) => {
+  const rootRoute = createRootRoute();
+  const createRecipeRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/create",
+    component: () => <Create />,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([createRecipeRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("Create Component", () => {
   it("should render component", async () => {
-    const rootRoute = createRootRoute();
-    const postRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/create",
-      component: () => <Create />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([postRoute]),
-      history: createMemoryHistory({ initialEntries: ["/create"] }),
-    });
+    const { router } = setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-
-    await rendered.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
     const nameInput =
       screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
     await userEvent.type(nameInput, "test_name");
@@ -108,44 +115,16 @@ describe("Create Component", () => {
   });
 
   it("button is disable when input field is empty", async () => {
-    const rootRoute = createRootRoute();
-    const postRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/create",
-      component: () => <Create />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([postRoute]),
-      history: createMemoryHistory({ initialEntries: ["/create"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-    await rendered.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
     expect(screen.getByText("送信")).toBeDisabled();
   });
   it("an alert appears when ingredients name and quantity is empty", async () => {
-    const rootRoute = createRootRoute();
-    const postRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/create",
-      component: () => <Create />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([postRoute]),
-      history: createMemoryHistory({ initialEntries: ["/create"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-    await rendered.findByText("レシピ投稿画面");
-    await rendered.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
     const nameInput =
       screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
     await userEvent.type(nameInput, "test_name");
@@ -162,24 +141,10 @@ describe("Create Component", () => {
     );
   });
   it("an alert appears when ingredients name is empty", async () => {
-    const rootRoute = createRootRoute();
-    const postRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/create",
-      component: () => <Create />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([postRoute]),
-      history: createMemoryHistory({ initialEntries: ["/create"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-    await rendered.findByText("レシピ投稿画面");
-    await rendered.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
     const nameInput =
       screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
     await userEvent.type(nameInput, "test_name");
@@ -198,24 +163,9 @@ describe("Create Component", () => {
     );
   });
   it("an alert appears when ingredients quantity is empty", async () => {
-    const rootRoute = createRootRoute();
-    const postRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/create",
-      component: () => <Create />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([postRoute]),
-      history: createMemoryHistory({ initialEntries: ["/create"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-    await rendered.findByText("レシピ投稿画面");
-    await rendered.findByText("レシピ投稿画面");
+    setupTestRouter();
+    await screen.findByText("レシピ投稿画面");
+    await screen.findByText("レシピ投稿画面");
     const nameInput =
       screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
     await userEvent.type(nameInput, "test_name");

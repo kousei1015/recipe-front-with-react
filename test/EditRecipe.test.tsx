@@ -76,24 +76,31 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/1/edit"]) => {
+  const rootRoute = createRootRoute();
+  const recipeEditRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/1/edit",
+    component: () => <Index />,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([recipeEditRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("EditRecipe Component", () => {
   it("Firstly, should render skeleton component", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1/edit",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1/edit"] }),
-    });
-
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    const { router } = setupTestRouter();
 
     expect(router.state.location.pathname).toBe("/1/edit");
     await screen.findByText("レシピ編集画面");
@@ -106,21 +113,8 @@ describe("EditRecipe Component", () => {
     screen.getByDisplayValue("100cc");
   });
   it("an alert appears when ingredients name and quantity is empty", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1/edit",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1/edit"] }),
-    });
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
+
     await screen.findByText("レシピ編集画面");
 
     // 材料の名前を入力するinputのvalueを空にする
@@ -143,21 +137,8 @@ describe("EditRecipe Component", () => {
     );
   });
   it("an alert appears when ingredients name is empty", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1/edit",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1/edit"] }),
-    });
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
+
     await screen.findByText("レシピ編集画面");
 
     await screen.findByDisplayValue("test_name");
@@ -181,22 +162,8 @@ describe("EditRecipe Component", () => {
     screen.debug();
   });
   it("an alert appears when ingredients quantity is empty", async () => {
-    const rootRoute = createRootRoute();
-    const detail = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/1/edit",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([detail]),
-      history: createMemoryHistory({ initialEntries: ["/1/edit"] }),
-    });
+    setupTestRouter();
 
-    render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("レシピ編集画面");
 
     await screen.findByDisplayValue("test_name");

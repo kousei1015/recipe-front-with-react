@@ -25,24 +25,32 @@ const queryClient = new QueryClient({
   },
 });
 
+const setupTestRouter = (initialEntries = ["/signup"]) => {
+  const rootRoute = createRootRoute();
+  const signUpRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/signup",
+    component: () => <SignUp />,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([signUpRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("SignUp Component", () => {
   it("Validate message should disappear when user type peoperty field", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signup",
-      component: () => <SignUp />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signup"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("新規登録");
     const emailInput = screen.getByPlaceholderText("emailを入力してください");
     const passwordInput =
@@ -60,51 +68,41 @@ describe("SignUp Component", () => {
   });
 
   it("Validate message should appear", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signup",
-      component: () => <SignUp />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signup"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
+    
     await screen.findByText("新規登録");
     const emailInput = screen.getByPlaceholderText("emailを入力してください");
     const passwordInput =
       screen.getByPlaceholderText("passwordを入力してください");
 
-      await userEvent.type(emailInput, "dummy");
+    await userEvent.type(emailInput, "dummy");
 
-      // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
-      expect(screen.queryByText("正しいメールアドレスを入力して下さい")).toBeNull();
-      
-      // フォーカスを外す
-      await userEvent.tab()
-      
-      // フォーカスを外した後は、エラーメッセージが表示されることを確認
-      expect(
-        screen.getByText("正しいメールアドレスを入力して下さい")
-      ).toBeTruthy();
-  
-      await userEvent.type(passwordInput, "dummy");
-  
-      // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
-      expect(screen.queryByText("パスワードは6文字以上入力して下さい")).toBeNull();
-      
-      // フォーカスを外す
-      await userEvent.tab()
-      
-      // フォーカスを外した後は、エラーメッセージが表示されることを確認
-      expect(
-        screen.getByText("パスワードは6文字以上入力して下さい")
-      ).toBeTruthy();
+    // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
+    expect(
+      screen.queryByText("正しいメールアドレスを入力して下さい")
+    ).toBeNull();
+
+    // フォーカスを外す
+    await userEvent.tab();
+
+    // フォーカスを外した後は、エラーメッセージが表示されることを確認
+    expect(
+      screen.getByText("正しいメールアドレスを入力して下さい")
+    ).toBeTruthy();
+
+    await userEvent.type(passwordInput, "dummy");
+
+    // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
+    expect(
+      screen.queryByText("パスワードは6文字以上入力して下さい")
+    ).toBeNull();
+
+    // フォーカスを外す
+    await userEvent.tab();
+
+    // フォーカスを外した後は、エラーメッセージが表示されることを確認
+    expect(
+      screen.getByText("パスワードは6文字以上入力して下さい")
+    ).toBeTruthy();
   });
 });
