@@ -42,9 +42,12 @@ export const handlers = [
     );
   }),
   http.get("http://localhost:3000/v1/users/current_user_info.json", () => {
-    return HttpResponse.json({
+    return HttpResponse.json(
+      {
         is_login: false,
-      }, {status: 200});
+      },
+      { status: 200 }
+    );
   }),
 ];
 
@@ -61,73 +64,45 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/"]) => {
+  const rootRoute = createRootRoute();
+  const indexRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/",
+    component: () => <Index />,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([indexRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("Index Component", () => {
   it("should render recipes", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute]),
-      history: createMemoryHistory({ initialEntries: ["/"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-    await rendered.findByText("レシピ一覧");
+    await screen.findByText("レシピ一覧");
     await screen.findByText("test");
     await screen.findByText("20分未満");
   });
 
   it("firstly, should render skeletons", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute]),
-      history: createMemoryHistory({ initialEntries: ["/"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
-
-    await rendered.findByText("レシピ一覧");
-    expect(rendered.getAllByTestId("skeletonsTest")).toHaveLength(9);
+    setupTestRouter();
+    await screen.findByText("レシピ一覧");
+    expect(screen.getAllByTestId("skeletonsTest")).toHaveLength(9);
   });
 
   it("Should jump to detail URL successfully work when click recipe", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/",
-      component: () => <Index />,
-    });
-    const detailRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/$recipeId",
-      component: SinglePost,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute, detailRoute]),
-      history: createMemoryHistory({ initialEntries: ["/"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    const { router } = setupTestRouter();
 
     await screen.findByText("test");
     await screen.findByText("20分未満");

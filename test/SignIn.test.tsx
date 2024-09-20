@@ -24,7 +24,6 @@ import userEvent from "@testing-library/user-event";
 
 const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
-
 beforeAll(() => {
   server.listen();
 });
@@ -87,24 +86,32 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/signin"]) => {
+  const rootRoute = createRootRoute();
+  const signInRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/signin",
+    component: () => <SignIn />,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([signInRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("SignIn Component", () => {
   it("Validate message should disappear when user type peoperty field", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signin",
-      component: () => <SignIn />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signin"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
+    
     await screen.findByText("ログインフォーム");
     const emailInput = screen.getByPlaceholderText("emailを入力してください");
     const passwordInput =
@@ -122,22 +129,8 @@ describe("SignIn Component", () => {
   });
 
   it("Validate message should appear", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signin",
-      component: () => <SignIn />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signin"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("ログインフォーム");
     const emailInput = screen.getByPlaceholderText("emailを入力してください");
     const passwordInput =
@@ -146,11 +139,13 @@ describe("SignIn Component", () => {
     await userEvent.type(emailInput, "dummy");
 
     // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
-    expect(screen.queryByText("正しいメールアドレスを入力して下さい")).toBeNull();
-    
+    expect(
+      screen.queryByText("正しいメールアドレスを入力して下さい")
+    ).toBeNull();
+
     // フォーカスを外す
-    await userEvent.tab()
-    
+    await userEvent.tab();
+
     // フォーカスを外した後は、エラーメッセージが表示されることを確認
     expect(
       screen.getByText("正しいメールアドレスを入力して下さい")
@@ -159,10 +154,12 @@ describe("SignIn Component", () => {
     await userEvent.type(passwordInput, "dummy");
 
     // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
-    expect(screen.queryByText("パスワードは6文字以上入力して下さい")).toBeNull();
-    
+    expect(
+      screen.queryByText("パスワードは6文字以上入力して下さい")
+    ).toBeNull();
+
     // フォーカスを外す
-    await userEvent.tab()
+    await userEvent.tab();
 
     // フォーカスを外した後は、エラーメッセージが表示されることを確認
     expect(
@@ -171,22 +168,7 @@ describe("SignIn Component", () => {
   });
 
   it("An alert should appear when a 401 error is returned", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signin",
-      component: () => <SignIn />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signin"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
     server.use(
       http.post("http://localhost:3000/v1/auth/sign_in", () => {
         return new HttpResponse(null, { status: 401 });

@@ -50,24 +50,30 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/favorites"]) => {
+  const rootRoute = createRootRoute();
+  const favoriteRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/favorites",
+    component: () => <Favorite />,
+  });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([favoriteRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("FavRecipes Component", () => {
   it("should render favorite commponent", async () => {
-    const rootRoute = createRootRoute();
-    const favoriteRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/favorites",
-      component: () => <Favorite />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([favoriteRoute]),
-      history: createMemoryHistory({ initialEntries: ["/favorites"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
 
     await screen.findByText("test_name");
     screen.getByText("保存済みレシピ");

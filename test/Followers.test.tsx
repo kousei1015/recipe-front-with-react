@@ -38,6 +38,12 @@ export const handlers = [
       { status: 200 }
     );
   }),
+  http.get("http://localhost:3000/v1/users/current_user_info.json", () => {
+    return HttpResponse.json(
+      { is_login: true, user_id: 1, user_name: "me", avatar_url: "" },
+      { status: 200 }
+    );
+  }),
 ];
 
 const server = setupServer(...handlers);
@@ -53,24 +59,31 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/myfollowers"]) => {
+  const rootRoute = createRootRoute();
+  const followersRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/myfollowers",
+    component: () => <Followers />,
+  });
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([followersRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  const rendered = render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("Followers Component", () => {
   it("should render Followers commponent", async () => {
-    const rootRoute = createRootRoute();
-    const favoriteRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/followers",
-      component: () => <Followers />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([favoriteRoute]),
-      history: createMemoryHistory({ initialEntries: ["/followers"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("test_user");
     screen.getByText("フォロワー");
   });

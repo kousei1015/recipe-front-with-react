@@ -50,24 +50,33 @@ afterAll(() => {
   server.close();
 });
 
+const setupTestRouter = (initialEntries = ["/profile"]) => {
+  const rootRoute = createRootRoute();
+
+  const profileEditRoute = createRoute({
+    getParentRoute: () => rootRoute,
+    path: "/profile",
+    component: Index,
+  });
+
+  const router = createRouter({
+    routeTree: rootRoute.addChildren([profileEditRoute]),
+    history: createMemoryHistory({ initialEntries }),
+  });
+
+  render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+
+  return { router };
+};
+
 describe("Index Component", () => {
   it("Should render profile edit page ui", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/profile",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute]),
-      history: createMemoryHistory({ initialEntries: ["/profile"] }),
-    });
+    setupTestRouter();
 
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
     await screen.findByText("プロフィール編集");
     // user-name の input 要素が存在することを確認
     const userNameInput = screen.getByTestId("user-name");
@@ -80,22 +89,7 @@ describe("Index Component", () => {
   });
 
   it("Should render current username ", async () => {
-    const rootRoute = createRootRoute();
-    const indexRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/profile",
-      component: () => <Index />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([indexRoute]),
-      history: createMemoryHistory({ initialEntries: ["/profile"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
 
     await screen.findByText("プロフィール編集");
     await screen.findByDisplayValue("テストユーザー");
