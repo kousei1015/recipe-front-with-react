@@ -207,6 +207,7 @@ a:not([class]) {
   padding: 0;
   box-sizing: border-box;
   color: var(--text-color);
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 body {
