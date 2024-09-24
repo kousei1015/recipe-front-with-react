@@ -5,7 +5,7 @@ import {
   keepPreviousData,
 } from "@tanstack/react-query";
 import { getRecipes } from "../api/getRecipes";
-import { fetchUserInfo } from "../api/fetchUserInfo";
+import { getLoginUserInfo } from "../api/getLoginUserInfo";
 import { getRecipe } from "../api/getRecipe";
 import { getFollowings } from "../api/getFollowings";
 import { getFollowers } from "../api/getFollowers";
@@ -67,7 +67,7 @@ export const useFetchRecipes = (page: number, option: string) => {
 };
 
 export const useFetchAuthInfo = () => {
-  return useQuery({ queryKey: ["authInfo"], queryFn: fetchUserInfo });
+  return useQuery({ queryKey: ["authInfo"], queryFn: getLoginUserInfo });
 };
 
 export const useFetchRecipe = (id: string) => {
