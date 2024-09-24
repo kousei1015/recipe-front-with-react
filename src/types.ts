@@ -68,7 +68,7 @@ export type RECIPES = {
     user_name: string;
     cooking_time: CookingTime;
   }[];
-  pagination?: {
+  pagination: {
     total_count: number;
     total_pages: number;
     current_page: number;
