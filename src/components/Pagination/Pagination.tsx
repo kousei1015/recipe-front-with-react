@@ -1,22 +1,20 @@
 import styles from "./Pagination.module.css";
 import usePaginateStore from "@/store/usePaginateStore";
-import usePagination from "@/hooks/usePagination";
+import { usePagination } from "@/hooks/usePagination"; // 修正: usePaginationをフックとしてインポート
 import { RECIPES } from "@/types";
 
-const Pagination = ({ recipes }: { recipes: RECIPES }) => {
+const Pagination = ({ pagination }: { pagination: RECIPES["pagination"] }) => {
   const { page, clickPage } = usePaginateStore();
-  const pagesArray = Array(recipes.pagination?.total_pages)
-    .fill(0)
-    .map((_, index) => index + 1);
+  
+  const { total_pages, current_page } = pagination;
 
-  const currentPage = recipes.pagination?.current_page;
-  const { pagesFunc } = usePagination(pagesArray, currentPage as number);
-  const pagination = pagesFunc();
+  const paginations = usePagination(total_pages, current_page);
 
   return (
     <div className={styles.wrapper}>
-      {pagination.map((pg) => (
+      {paginations.map((pg) => (
         <button
+          key={pg}
           className={pg === page ? styles.active_button : styles.button}
           onClick={(e) => {
             e.preventDefault();

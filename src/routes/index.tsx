@@ -68,7 +68,7 @@ function Index() {
 
       <Recipes recipes={recipes.data} />
 
-      <Pagination recipes={recipes} />
+      <Pagination pagination={recipes.pagination} />
     </>
   );
 }
