@@ -115,8 +115,8 @@ export type ModalType = {
 };
 
 export type PaginationType = {
-  page: number;
-  clickPage: (pg: number) => void;
+  currentPage: number;
+  clickPage: (currentPage: number) => void;
 };
 
 export type SelectValueType = {

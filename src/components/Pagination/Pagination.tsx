@@ -4,7 +4,7 @@ import { usePagination } from "@/hooks/usePagination"; // 修正: usePagination�
 import { RECIPES } from "@/types";
 
 const Pagination = ({ pagination }: { pagination: RECIPES["pagination"] }) => {
-  const { page, clickPage } = usePaginateStore();
+  const { currentPage, clickPage } = usePaginateStore();
   
   const { total_pages, current_page } = pagination;
 
@@ -15,7 +15,7 @@ const Pagination = ({ pagination }: { pagination: RECIPES["pagination"] }) => {
       {paginations.map((pg) => (
         <button
           key={pg}
-          className={pg === page ? styles.active_button : styles.button}
+          className={pg === currentPage ? styles.active_button : styles.button}
           onClick={(e) => {
             e.preventDefault();
             if (typeof pg === "number") clickPage(pg);
