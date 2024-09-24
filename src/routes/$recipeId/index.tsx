@@ -99,12 +99,13 @@ function SinglePost() {
           </div>
         </div>
         <div className={styles.texts}>
+          <h2 className={styles.instructions_title}>作り方</h2>
           <div className={styles.process}>
             <p>{recipe.process}</p>
           </div>
-          <h2 className={styles.cooking_time}>
+          <h3 className={styles.cooking_time}>
             所要時間: {getCookingTImeLabel(recipe.cooking_time)}
-          </h2>
+          </h3>
           <h3>材料</h3>
           <ul className={styles.ingredient_list}>
             {recipe?.ingredients?.map((ingredient) => (
