@@ -39,8 +39,9 @@
     position: absolute;
     top: 5px;
     right: 5px;
-    padding: 0.5rem;
+    padding: 0.7rem;
     border-radius: 2rem;
+    font-weight: 500;
 }
 
 @media screen and (max-width: 1200px) {

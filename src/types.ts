@@ -68,7 +68,7 @@ export type RECIPES = {
     user_name: string;
     cooking_time: CookingTime;
   }[];
-  pagination?: {
+  pagination: {
     total_count: number;
     total_pages: number;
     current_page: number;
@@ -115,8 +115,8 @@ export type ModalType = {
 };
 
 export type PaginationType = {
-  page: number;
-  clickPage: (pg: number) => void;
+  currentPage: number;
+  clickPage: (currentPage: number) => void;
 };
 
 export type SelectValueType = {

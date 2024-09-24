@@ -37,6 +37,10 @@ export const handlers = [
             cooking_time: 3,
           },
         ],
+        pagination: {
+          total_pages: 1,
+          current_page: 1
+        }
       },
       { status: 200 }
     );

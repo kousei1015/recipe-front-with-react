@@ -22,9 +22,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { page } = usePaginateStore();
+  const { currentPage } = usePaginateStore();
   const { orderType } = useSelectForSort();
-  const { data: recipes } = useFetchRecipes(page, orderType);
+  const { data: recipes } = useFetchRecipes(currentPage, orderType);
 
   const { data: authInfo, refetch } = useFetchAuthInfo();
 
@@ -68,7 +68,7 @@ function Index() {
 
       <Recipes recipes={recipes.data} />
 
-      <Pagination recipes={recipes} />
+      <Pagination pagination={recipes.pagination} />
     </>
   );
 }
