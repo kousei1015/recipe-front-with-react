@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link } from "@tanstack/react-router";
 import styles from "./Search.module.css";
 import Fuse from "fuse.js";
@@ -8,6 +9,14 @@ import { useSearchStore } from "@/store/useSearchStore";
 const Search = ({ recipes }: { recipes: SUGGESTED_RECIPES | undefined }) => {
   const { query, setQuery, filteredRecipes, setFilteredRecipes } =
     useSearchStore();
+    
+  const fuse = useMemo(() => {
+    if (!recipes || recipes.length === 0) return null;
+    return new Fuse(recipes, {
+      keys: ["recipe_name"],
+      includeScore: true,
+    });
+  }, [recipes]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -18,13 +27,10 @@ const Search = ({ recipes }: { recipes: SUGGESTED_RECIPES | undefined }) => {
       return;
     }
 
-    const fuse = new Fuse(recipes, {
-      keys: ["recipe_name"],
-      includeScore: true,
-    });
-
-    const results = fuse.search(query).map(({ item }) => item);
-    setFilteredRecipes(results);
+    if (fuse) {
+      const results = fuse.search(query).map(({ item }) => item);
+      setFilteredRecipes(results);
+    }
   };
 
   return (
