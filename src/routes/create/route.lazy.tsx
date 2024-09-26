@@ -61,7 +61,7 @@ export function Create() {
     if (files && files[0]) {
       const file = files[0];
       const options = {
-        maxSizeMB: 3,
+        maxSizeMB: 0.3,
         maxWidthOrHeight: 1000,
       };
 
