@@ -6,6 +6,7 @@ import styles from "@/styles/Sign.module.css";
 import { z } from "zod";
 import { useFetchAuthInfo, usePatchProfile } from "@/hooks/useQueryHooks";
 import { ProfileEditProps } from "@/types";
+import imageCompression from "browser-image-compression";
 
 export const Route = createLazyFileRoute("/profile")({
   component: ProfileEdit,
@@ -47,11 +48,26 @@ function ProfileEdit() {
 
   const onSubmit = async (data: ProfileEditProps) => {
     const formData = new FormData();
-
     formData.append("name", data.name);
 
+    // 画像の圧縮処理
     if (fileInput.current?.files?.[0]) {
-      formData.append("avatar", fileInput.current.files[0]);
+      const imageFile = fileInput.current.files[0];
+
+      const options = {
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 1000,
+      };
+
+      try {
+        // 画像を圧縮
+        const compressedFile = await imageCompression(imageFile, options);
+
+        // 圧縮した画像をFormDataに追加
+        formData.append("avatar", compressedFile);
+      } catch (error) {
+        window.alert("エラーが発生しました。もう一度やり直してください");
+      }
     }
 
     await editProfileMutation.mutateAsync(formData);
