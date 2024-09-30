@@ -104,7 +104,7 @@ describe("EditRecipe Component", () => {
 
     expect(router.state.location.pathname).toBe("/1/edit");
     await screen.findByText("レシピ編集画面");
-    screen.getByText("材料を追加");
+    screen.getByText("+ 材料を追加");
     await screen.findByDisplayValue("test_name");
     screen.getByText("process_test");
     screen.getByDisplayValue("test1");

@@ -109,6 +109,7 @@ describe("Create Component", () => {
     await userEvent.type(ingredientName, "test1");
     const ingredientQuantity = screen.getByPlaceholderText("量");
     await userEvent.type(ingredientQuantity, "100cc");
+    screen.getByText("+ 材料を追加");
     expect(screen.getByText("送信")).toBeEnabled();
     await userEvent.click(screen.getByText("送信"));
     await expect(router.state.location.pathname).toBe("/");
