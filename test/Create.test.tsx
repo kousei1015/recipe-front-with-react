@@ -1,6 +1,6 @@
 import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
-import { render, cleanup, screen, findByText } from "@testing-library/react";
+import { render, cleanup, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import Create from "../src/routes/create/route.lazy";
 import {
@@ -16,7 +16,6 @@ import { setupServer } from "msw/node";
 import { vi } from "vitest";
 
 const mockMutateAsync = vi.fn();
-
 const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
 const queryClient = new QueryClient({
@@ -41,7 +40,6 @@ vi.mock("../hooks/useQueryHooks", async () => {
 });
 
 export const handlers = [
-  // Intercept "GET https://example.com/user" requests...
   http.post("http://localhost:3000/v1/recipes", () => {
     return HttpResponse.json(
       {
@@ -92,96 +90,90 @@ const setupTestRouter = (initialEntries = ["/create"]) => {
   return { router };
 };
 
+const getElements = async () => {
+  await screen.findByText("レシピ投稿画面");
+  return {
+    nameInput: screen.getByPlaceholderText("レシピのタイトルを入力して下さい"),
+    processInput: screen.getByPlaceholderText("レシピの作り方を書いて下さい"),
+    selectElement: screen.getByRole("combobox"),
+    ingredientName: screen.getByPlaceholderText("材料の名前"),
+    ingredientQuantity: screen.getByPlaceholderText("量"),
+    submitButton: screen.getByText("送信"),
+  };
+};
+
 describe("Create Component", () => {
   it("should render component", async () => {
-    const { router } = setupTestRouter();
+    setupTestRouter();
+    await getElements();
+    
+    expect(screen.getByText("レシピ投稿画面")).toBeInTheDocument();
+    expect(screen.getByText("送信")).toBeDisabled();
+  });
 
-    await screen.findByText("レシピ投稿画面");
-    const nameInput =
-      screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
+  it("should enable the submit button when all inputs are filled", async () => {
+    const { router } = setupTestRouter();
+    const {
+      nameInput,
+      processInput,
+      selectElement,
+      ingredientName,
+      ingredientQuantity,
+      submitButton,
+    } = await getElements();
+
     await userEvent.type(nameInput, "test_name");
-    const processInput =
-      screen.getByPlaceholderText("レシピの作り方を書いて下さい");
     await userEvent.type(processInput, "test_process");
-    const selectElement = screen.getByRole("combobox");
     await userEvent.selectOptions(selectElement, "10分未満");
-    const ingredientName = screen.getByPlaceholderText("材料の名前");
     await userEvent.type(ingredientName, "test1");
-    const ingredientQuantity = screen.getByPlaceholderText("量");
     await userEvent.type(ingredientQuantity, "100cc");
-    screen.getByText("+ 材料を追加");
-    expect(screen.getByText("送信")).toBeEnabled();
-    await userEvent.click(screen.getByText("送信"));
+
+    expect(submitButton).toBeEnabled();
+    await userEvent.click(submitButton);
     await expect(router.state.location.pathname).toBe("/");
   });
 
-  it("button is disable when input field is empty", async () => {
+  it("button is disabled when input field is empty", async () => {
     setupTestRouter();
-
-    await screen.findByText("レシピ投稿画面");
-    expect(screen.getByText("送信")).toBeDisabled();
+    const { submitButton } = await getElements();
+    expect(submitButton).toBeDisabled();
   });
-  it("an alert appears when ingredients name and quantity is empty", async () => {
-    setupTestRouter();
 
-    await screen.findByText("レシピ投稿画面");
-    await screen.findByText("レシピ投稿画面");
-    const nameInput =
-      screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
+  it("an alert appears when ingredients name and quantity are empty", async () => {
+    setupTestRouter();
+    const { nameInput, processInput, selectElement, submitButton } = await getElements();
+
     await userEvent.type(nameInput, "test_name");
-    const processInput =
-      screen.getByPlaceholderText("レシピの作り方を書いて下さい");
     await userEvent.type(processInput, "test_process");
-    const selectElement = screen.getByRole("combobox");
     await userEvent.selectOptions(selectElement, "10分未満");
-    await userEvent.click(screen.getByText("送信"));
+    await userEvent.click(submitButton);
 
-    // 材料の名前と量、両方を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
+    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
   });
+
   it("an alert appears when ingredients name is empty", async () => {
     setupTestRouter();
+    const { nameInput, processInput, selectElement, ingredientQuantity, submitButton } = await getElements();
 
-    await screen.findByText("レシピ投稿画面");
-    await screen.findByText("レシピ投稿画面");
-    const nameInput =
-      screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
     await userEvent.type(nameInput, "test_name");
-    const processInput =
-      screen.getByPlaceholderText("レシピの作り方を書いて下さい");
     await userEvent.type(processInput, "test_process");
-    const selectElement = screen.getByRole("combobox");
     await userEvent.selectOptions(selectElement, "10分未満");
-    await userEvent.click(screen.getByText("送信"));
-    const ingredientQuantity = screen.getByPlaceholderText("量");
     await userEvent.type(ingredientQuantity, "100cc");
+    await userEvent.click(submitButton);
 
-    // 材料の名前を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
+    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
   });
+
   it("an alert appears when ingredients quantity is empty", async () => {
     setupTestRouter();
-    await screen.findByText("レシピ投稿画面");
-    await screen.findByText("レシピ投稿画面");
-    const nameInput =
-      screen.getByPlaceholderText("レシピのタイトルを入力して下さい");
-    await userEvent.type(nameInput, "test_name");
-    const processInput =
-      screen.getByPlaceholderText("レシピの作り方を書いて下さい");
-    await userEvent.type(processInput, "test_process");
-    const selectElement = screen.getByRole("combobox");
-    await userEvent.selectOptions(selectElement, "10分未満");
-    await userEvent.click(screen.getByText("送信"));
-    const ingredientName = screen.getByPlaceholderText("材料の名前");
-    await userEvent.type(ingredientName, "test1");
+    const { nameInput, processInput, selectElement, ingredientName, submitButton } = await getElements();
 
-    // 材料の量を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
+    await userEvent.type(nameInput, "test_name");
+    await userEvent.type(processInput, "test_process");
+    await userEvent.selectOptions(selectElement, "10分未満");
+    await userEvent.type(ingredientName, "test1");
+    await userEvent.click(submitButton);
+
+    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
   });
 });

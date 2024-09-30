@@ -2,7 +2,6 @@ import React from "react";
 import { describe, it, expect, beforeAll, afterEach, afterAll } from "vitest";
 import { render, cleanup, screen } from "@testing-library/react";
 import Index from "../src/routes/index";
-import SinglePost from "../src/routes/$recipeId/index";
 import {
   createRouter,
   createRootRoute,
