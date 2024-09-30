@@ -24,28 +24,8 @@ import userEvent from "@testing-library/user-event";
 
 const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
-beforeAll(() => {
-  server.listen();
-});
-afterEach(() => {
-  server.resetHandlers();
-  cleanup();
-});
-afterAll(() => {
-  server.close();
-});
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      gcTime: 0,
-    },
-  },
-});
-
-export const handlers = [
-  // Intercept "GET https://example.com/user" requests...
+// Mock server setup
+const handlers = [
   http.get("http://localhost:3000/v1/auth/sign_in", () => {
     return HttpResponse.json(
       {
@@ -74,17 +54,21 @@ export const handlers = [
 ];
 
 const server = setupServer(...handlers);
-
-beforeAll(() => {
-  server.listen();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      gcTime: 0,
+    },
+  },
 });
+
+beforeAll(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
   cleanup();
 });
-afterAll(() => {
-  server.close();
-});
+afterAll(() => server.close());
 
 const setupTestRouter = (initialEntries = ["/signin"]) => {
   const rootRoute = createRootRoute();
@@ -109,9 +93,9 @@ const setupTestRouter = (initialEntries = ["/signin"]) => {
 };
 
 describe("SignIn Component", () => {
-  it("Validate message should disappear when user type peoperty field", async () => {
+  it("Validate message should disappear when user types valid fields", async () => {
     setupTestRouter();
-    
+
     await screen.findByText("ログインフォーム");
     const emailInput = screen.getByPlaceholderText("emailを入力してください");
     const passwordInput =
@@ -119,7 +103,7 @@ describe("SignIn Component", () => {
 
     await userEvent.type(emailInput, "dummy@gmail.com");
     await userEvent.type(passwordInput, "aaaaaa");
-    screen.debug();
+
     expect(
       screen.queryByText("正しいメールアドレスを入力して下さい")
     ).toBeNull();
@@ -138,30 +122,19 @@ describe("SignIn Component", () => {
 
     await userEvent.type(emailInput, "dummy");
 
-    // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
     expect(
       screen.queryByText("正しいメールアドレスを入力して下さい")
     ).toBeNull();
-
-    // フォーカスを外す
     await userEvent.tab();
-
-    // フォーカスを外した後は、エラーメッセージが表示されることを確認
     expect(
       screen.getByText("正しいメールアドレスを入力して下さい")
     ).toBeTruthy();
 
     await userEvent.type(passwordInput, "dummy");
-
-    // フォーカスを外さないと(onBlurイベントが走らないと)、エラーメッセージが表示されないことを確認
     expect(
       screen.queryByText("パスワードは6文字以上入力して下さい")
     ).toBeNull();
-
-    // フォーカスを外す
     await userEvent.tab();
-
-    // フォーカスを外した後は、エラーメッセージが表示されることを確認
     expect(
       screen.getByText("パスワードは6文字以上入力して下さい")
     ).toBeTruthy();
@@ -190,22 +163,7 @@ describe("SignIn Component", () => {
   });
 
   it("An alert should appear when a 500 error is returned", async () => {
-    const rootRoute = createRootRoute();
-    const SignInRoute = createRoute({
-      getParentRoute: () => rootRoute,
-      path: "/signin",
-      component: () => <SignIn />,
-    });
-    const router = createRouter({
-      routeTree: rootRoute.addChildren([SignInRoute]),
-      history: createMemoryHistory({ initialEntries: ["/signin"] }),
-    });
-
-    const rendered = render(
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    );
+    setupTestRouter();
     server.use(
       http.post("http://localhost:3000/v1/auth/sign_in", () => {
         return new HttpResponse(null, { status: 500 });
