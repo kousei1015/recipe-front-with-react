@@ -1,35 +1,51 @@
 .wrapper {
-    max-width: 1200px;
-    margin: 3rem auto 0;
-    text-align: center;
+  max-width: 1200px;
+  margin: 3rem auto;
+  text-align: center;
 }
 
 .wrapper h2 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .wrapper input {
-    display: block;
-    margin: 1rem auto;
-    width: 80%;
-    max-width: 600px;
+  display: block;
+  margin: 1rem auto;
+  width: 80%;
+  max-width: 600px;
+  padding: 0.3rem;
 }
 
 .wrapper textarea {
-    display: block;
-    width: 80%;
-    margin: 0 auto 1rem;
+  display: block;
+  padding: 0.3rem;
+  width: 80%;
+  margin: 0 auto 1rem;
 }
 
-.btn_wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 1rem;
+.cooking_time {
+  padding: 0.3rem;
+  display: block;
+  margin: 0.75rem auto;
 }
 
-.btn_wrapper > button:nth-child(2) {
-    margin: 2rem;
+.add_button,
+.delete_button {
+  color: var(--text-color);
+  background: transparent;
+  display: inline-block;
+  margin: 0.75rem;
+  padding: 0.5rem;
+}
+
+.add_button:hover,
+.delete_button:hover {
+  background: transparent;
+}
+
+.submit_button {
+  display: block;
+  margin: 1rem auto;
 }

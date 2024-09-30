@@ -142,7 +142,11 @@ export function Create() {
       ></textarea>
 
       <p>所要時間</p>
-      <select name="cooking-time" onChange={handleCookTime}>
+      <select 
+        className={styles.cooking_time}
+        name="cooking-time"
+        onChange={handleCookTime}
+      >
         <option value="1">5分未満</option>
         <option value="2">10分未満</option>
         <option value="3">20分未満</option>
@@ -163,15 +167,24 @@ export function Create() {
             onChange={(e) => handleIngredientQuantity(e, index)}
             placeholder="量"
           />
-          <button onClick={() => handleRemoveIngredient(index)}>削除</button>
+          <button
+            className={styles.delete_button}
+            onClick={() => handleRemoveIngredient(index)}
+          >
+            削除
+          </button>
         </div>
       ))}
-      <div className={styles.btn_wrapper}>
-        <button onClick={handleAddIngredient}>材料を追加</button>
-        <button onClick={handleClick} disabled={!name || !process}>
-          送信
-        </button>
-      </div>
+      <button className={styles.add_button} onClick={handleAddIngredient}>
+        + 材料を追加
+      </button>
+      <button
+        className={styles.submit_button}
+        onClick={handleClick}
+        disabled={!name || !process}
+      >
+        送信
+      </button>
     </div>
   );
 }
