@@ -150,7 +150,7 @@ export function Index() {
               </button>
               {errors.instructions?.[index]?.description && (
                 <p className={styles.error_text}>
-                  {errors.instructions[index].description.message}
+                  {errors?.instructions[index]?.description?.message}
                 </p>
               )}
             </div>
@@ -199,12 +199,12 @@ export function Index() {
               />
               {errors.ingredients?.[index]?.name && (
                 <p className={styles.error_text}>
-                  {errors.ingredients[index].name.message}
+                  {errors.ingredients[index]?.name?.message}
                 </p>
               )}
               {errors.ingredients?.[index]?.quantity && (
                 <p className={styles.error_text}>
-                  {errors.ingredients[index].quantity.message}
+                  {errors.ingredients[index]?.quantity?.message}
                 </p>
               )}
               <button
