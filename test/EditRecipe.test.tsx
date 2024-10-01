@@ -23,8 +23,6 @@ import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import "@testing-library/jest-dom";
 
-const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -40,7 +38,11 @@ const handlers = [
       {
         id: 1,
         recipe_name: "test_name",
-        process: "process_test",
+        instructions: [
+          {
+            description: "process_test",
+          },
+        ],
         image_url: null,
         user_id: 2,
         user_name: "test_user",
@@ -50,10 +52,6 @@ const handlers = [
           {
             name: "test1",
             quantity: "100g",
-          },
-          {
-            name: "test2",
-            quantity: "100cc",
           },
         ],
       },
@@ -75,6 +73,11 @@ afterEach(() => {
 afterAll(() => {
   server.close();
 });
+
+function getRepeatedString(length) {
+  const character = "a"; // 繰り返す文字
+  return character.repeat(length); // 指定された長さ分繰り返す
+}
 
 const setupTestRouter = (initialEntries = ["/1/edit"]) => {
   const rootRoute = createRootRoute();
@@ -98,87 +101,72 @@ const setupTestRouter = (initialEntries = ["/1/edit"]) => {
   return { router };
 };
 
+const getElements = async () => {
+  await screen.findByText("レシピ編集画面"); // この行で待機
+  return {
+    nameInput: await screen.findByPlaceholderText("レシピのタイトルを入力して下さい"),
+    instructionInput: await screen.findByPlaceholderText("手順の内容を入力"),
+    selectElement: await screen.findByRole("combobox"),
+    ingredientName: await screen.findByPlaceholderText("材料の名前"),
+    ingredientQuantity: await screen.findByPlaceholderText("量"),
+    submitButton: await screen.findByText("送信"),
+  };
+};
+
+
 describe("EditRecipe Component", () => {
-  it("Firstly, should render skeleton component", async () => {
+  it("should render component", async () => {
     const { router } = setupTestRouter();
 
     expect(router.state.location.pathname).toBe("/1/edit");
     await screen.findByText("レシピ編集画面");
     screen.getByText("+ 材料を追加");
     await screen.findByDisplayValue("test_name");
-    screen.getByText("process_test");
+    screen.getByDisplayValue("process_test");
     screen.getByDisplayValue("test1");
     screen.getByDisplayValue("100g");
-    screen.getByDisplayValue("test2");
-    screen.getByDisplayValue("100cc");
   });
-  it("an alert appears when ingredients name and quantity is empty", async () => {
+  it("an error message appears when reqired field is empty", async () => {
     setupTestRouter();
+    const {
+      nameInput,
+      instructionInput,
+      ingredientName,
+      ingredientQuantity,
+      submitButton,
+    } = await getElements();
 
-    await screen.findByText("レシピ編集画面");
+    await userEvent.clear(nameInput);
+    await userEvent.clear(instructionInput);
+    await userEvent.clear(ingredientName);
+    await userEvent.clear(ingredientQuantity);
 
-    // 材料の名前を入力するinputのvalueを空にする
-    const ingredientName = screen.getAllByPlaceholderText("材料の名前");
-    for (const input of ingredientName) {
-      await userEvent.clear(input);
-    }
-
-    // 材料の量を入力するinputのvalueを空にする
-    const ingredientQuantity = screen.getAllByPlaceholderText("量");
-    for (const input of ingredientQuantity) {
-      await userEvent.clear(input);
-    }
-
-    await userEvent.click(screen.getByText("送信"));
-
-    // 材料の名前と量、両方を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
+    await userEvent.click(submitButton);
+    screen.getByText("レシピのタイトルを入力してください");
+    screen.getByText("手順の内容を入力してください");
+    screen.getByText("材料の量を入力してください");
+    screen.getByText("材料の名前を入力してください");
   });
-  it("an alert appears when ingredients name is empty", async () => {
+  it("an error message appears when field's length is over", async () => {
     setupTestRouter();
+    const {
+      nameInput,
+      instructionInput,
+      ingredientName,
+      ingredientQuantity,
+      submitButton,
+    } = await getElements();
 
-    await screen.findByText("レシピ編集画面");
+    await userEvent.type(nameInput, getRepeatedString(31));
+    await userEvent.type(instructionInput, getRepeatedString(201)); // 最初のインストラクションフィールドを使用
+    await userEvent.type(ingredientName, getRepeatedString(21)); // 最初の材料名フィールドを使用
+    await userEvent.type(ingredientQuantity, getRepeatedString(21)); // 最初の材料量フィールドを使用
 
-    await screen.findByDisplayValue("test_name");
-    screen.getByDisplayValue("test1");
-    screen.getByDisplayValue("test2");
-    // 材料の名前を入力するinputのvalueを空にする
-    const ingredientName = screen.getAllByPlaceholderText("材料の名前");
-    for (const input of ingredientName) {
-      userEvent.clear(input);
-    }
+    await userEvent.click(submitButton);
 
-    for (const input of ingredientName) {
-      expect(input).toHaveValue("");
-    }
-
-    await userEvent.click(screen.getByText("送信"));
-    // 材料の名前を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
-    screen.debug();
-  });
-  it("an alert appears when ingredients quantity is empty", async () => {
-    setupTestRouter();
-
-    await screen.findByText("レシピ編集画面");
-
-    await screen.findByDisplayValue("test_name");
-    screen.getByDisplayValue("100g");
-    screen.getByDisplayValue("100cc");
-    // 材料の量を入力するinputのvalueを空にする
-    const ingredientQuantity = screen.getAllByPlaceholderText("量");
-    for (const input of ingredientQuantity) {
-      await userEvent.clear(input);
-    }
-
-    await userEvent.click(screen.getByText("送信"));
-    // 材料の量を入力しなかった場合、window.alertが出現確認
-    expect(alertMock).toHaveBeenCalledWith(
-      "材料の名前と量を両方とも入力してください"
-    );
+    screen.getByText("タイトルは30文字以内で入力してください");
+    screen.getByText("手順は200文字以内で入力してください");
+    screen.getByText("材料の名前は20字以内にしてください");
+    screen.getByText("材料の量は20字以内にしてください");
   });
 });
