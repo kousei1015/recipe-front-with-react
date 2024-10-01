@@ -1,13 +1,19 @@
 .wrapper {
   max-width: 1200px;
   margin: 3rem auto;
+  padding: 1.25rem;
   text-align: center;
 }
 
 .wrapper h2 {
   font-size: 1.3rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin: 1rem;
+}
+
+.error_text {
+  width: 100%;
+  color: var(--red);
 }
 
 .wrapper input {
@@ -18,17 +24,29 @@
   padding: 0.3rem;
 }
 
-.wrapper textarea {
-  display: block;
-  padding: 0.3rem;
-  width: 80%;
-  margin: 0 auto 1rem;
+.instruction_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.wrapper .instruction_input {
+  margin: 0;
+}
+
+.instruction_container .delete_button {
+  flex-shrink: 0;
 }
 
 .cooking_time {
   padding: 0.3rem;
   display: block;
   margin: 0.75rem auto;
+}
+
+.ingredient input {
+  max-width: 300px;
 }
 
 .add_button,

@@ -16,7 +16,6 @@ import { setupServer } from "msw/node";
 import { vi } from "vitest";
 
 const mockMutateAsync = vi.fn();
-const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -68,6 +67,11 @@ afterAll(() => {
   server.close();
 });
 
+function getRepeatedString(length) {
+  const character = "a"; // 繰り返す文字
+  return character.repeat(length); // 指定された長さ分繰り返す
+}
+
 const setupTestRouter = (initialEntries = ["/create"]) => {
   const rootRoute = createRootRoute();
   const createRecipeRoute = createRoute({
@@ -94,7 +98,7 @@ const getElements = async () => {
   await screen.findByText("レシピ投稿画面");
   return {
     nameInput: screen.getByPlaceholderText("レシピのタイトルを入力して下さい"),
-    processInput: screen.getByPlaceholderText("レシピの作り方を書いて下さい"),
+    instructionInput: screen.getByPlaceholderText("手順の内容を入力"),
     selectElement: screen.getByRole("combobox"),
     ingredientName: screen.getByPlaceholderText("材料の名前"),
     ingredientQuantity: screen.getByPlaceholderText("量"),
@@ -106,16 +110,14 @@ describe("Create Component", () => {
   it("should render component", async () => {
     setupTestRouter();
     await getElements();
-    
     expect(screen.getByText("レシピ投稿画面")).toBeInTheDocument();
-    expect(screen.getByText("送信")).toBeDisabled();
   });
 
   it("should enable the submit button when all inputs are filled", async () => {
     const { router } = setupTestRouter();
     const {
       nameInput,
-      processInput,
+      instructionInput,
       selectElement,
       ingredientName,
       ingredientQuantity,
@@ -123,7 +125,7 @@ describe("Create Component", () => {
     } = await getElements();
 
     await userEvent.type(nameInput, "test_name");
-    await userEvent.type(processInput, "test_process");
+    await userEvent.type(instructionInput, "test_process");
     await userEvent.selectOptions(selectElement, "10分未満");
     await userEvent.type(ingredientName, "test1");
     await userEvent.type(ingredientQuantity, "100cc");
@@ -133,47 +135,36 @@ describe("Create Component", () => {
     await expect(router.state.location.pathname).toBe("/");
   });
 
-  it("button is disabled when input field is empty", async () => {
+  it("an error message appears when reqired field is empty", async () => {
     setupTestRouter();
     const { submitButton } = await getElements();
-    expect(submitButton).toBeDisabled();
+
+    await userEvent.click(submitButton);
+    screen.getByText("レシピのタイトルを入力してください");
+    screen.getByText("手順の内容を入力してください");
+    screen.getByText("材料の量を入力してください");
+    screen.getByText("材料の名前を入力してください");
   });
 
-  it("an alert appears when ingredients name and quantity are empty", async () => {
+  it("an error message appears when filed's length is over", async () => {
     setupTestRouter();
-    const { nameInput, processInput, selectElement, submitButton } = await getElements();
+    const {
+      nameInput,
+      instructionInput,
+      ingredientName,
+      ingredientQuantity,
+      submitButton,
+    } = await getElements();
 
-    await userEvent.type(nameInput, "test_name");
-    await userEvent.type(processInput, "test_process");
-    await userEvent.selectOptions(selectElement, "10分未満");
+    await userEvent.type(nameInput, getRepeatedString(31));
+    await userEvent.type(instructionInput, getRepeatedString(201));
+    await userEvent.type(ingredientName, getRepeatedString(21));
+    await userEvent.type(ingredientQuantity, getRepeatedString(21));
+
     await userEvent.click(submitButton);
-
-    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
-  });
-
-  it("an alert appears when ingredients name is empty", async () => {
-    setupTestRouter();
-    const { nameInput, processInput, selectElement, ingredientQuantity, submitButton } = await getElements();
-
-    await userEvent.type(nameInput, "test_name");
-    await userEvent.type(processInput, "test_process");
-    await userEvent.selectOptions(selectElement, "10分未満");
-    await userEvent.type(ingredientQuantity, "100cc");
-    await userEvent.click(submitButton);
-
-    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
-  });
-
-  it("an alert appears when ingredients quantity is empty", async () => {
-    setupTestRouter();
-    const { nameInput, processInput, selectElement, ingredientName, submitButton } = await getElements();
-
-    await userEvent.type(nameInput, "test_name");
-    await userEvent.type(processInput, "test_process");
-    await userEvent.selectOptions(selectElement, "10分未満");
-    await userEvent.type(ingredientName, "test1");
-    await userEvent.click(submitButton);
-
-    expect(alertMock).toHaveBeenCalledWith("材料の名前と量を両方とも入力してください");
+    screen.getByText("タイトルは30文字以内で入力してください");
+    screen.getByText("手順は200文字以内で入力してください");
+    screen.getByText("材料の名前は20字以内にしてください");
+    screen.getByText("材料の量は20字以内にしてください");
   });
 });
