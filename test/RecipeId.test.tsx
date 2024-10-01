@@ -29,7 +29,11 @@ const handlers = [
       {
         id: 1,
         recipe_name: "test_name",
-        process: "process_test",
+        instructions: [
+          {
+            description: "process_test",
+          },
+        ],
         image_url: null,
         user_id: 2,
         user_name: "test_user",

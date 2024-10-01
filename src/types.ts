@@ -45,7 +45,9 @@ export enum CookingTime {
 export type RECIPE = {
   id: string;
   recipe_name: string;
-  process: string;
+  instructions: {
+    description: string;
+  }[]
   ingredients: {
     name: string;
     quantity: string;
