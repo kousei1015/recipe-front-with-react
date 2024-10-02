@@ -27,10 +27,13 @@
 }
 
 .process {
-  font-size: 1.2rem;
   text-align: left;
   padding: 2rem 0;
   white-space: pre-wrap;
+}
+
+.process > li {
+  padding-bottom: 0.75rem;
 }
 
 .cooking_time {
@@ -107,7 +110,6 @@
 }
 @media screen and (max-width: 768px) {
   .process {
-    font-size: 1rem;
     padding: 0.5rem;
   }
 }
