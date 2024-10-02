@@ -17,6 +17,7 @@ export function Create() {
     control,
     formState: { errors },
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: "",
       instructions: [{ description: "" }],

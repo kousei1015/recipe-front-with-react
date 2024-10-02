@@ -27,6 +27,7 @@ export function Index() {
     formState: { errors },
     reset,
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: "",
       instructions: [{ description: "" }],
