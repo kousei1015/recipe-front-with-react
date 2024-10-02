@@ -22,7 +22,7 @@ URLは https://web.arrange-cook.work です
 
 - **レシピの投稿**: ログインユーザーのみが新しいレシピを投稿することが可能です。
 
-  <img src="./images/create.png" alt="レシピの投稿" width="500px">
+  <img src="./images/createV2.png" alt="レシピの投稿" width="500px">
 
 - **レシピの詳細情報**: ログインユーザーのみが新しいレシピを投稿することが可能です。レシピの詳細を表示した際、アクセスしたユーザーがそのレシピの投稿者と同じならば、削除ボタンと編集ボタンが表示されます。
 
@@ -34,7 +34,7 @@ URLは https://web.arrange-cook.work です
 
 - **レシピの編集**: 自分が投稿したレシピに限り、そのレシピを編集することができます。
 
-  <img src="./images/edit.png" alt="レシピの編集" width="500px">
+  <img src="./images/editV2.png" alt="レシピの編集" width="500px">
 
 ### フォロー機能
 
