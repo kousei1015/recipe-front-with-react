@@ -1,34 +1,39 @@
-
 .wrapper {
-    width: 90%;
-    max-width: 1200px;
-    margin: 3rem auto 0;
-    text-align: center;
+  width: 90%;
+  max-width: 1200px;
+  margin: 3rem auto 0;
+  text-align: center;
 }
 
 .wrapper h2 {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
 .wrapper input {
-    display: block;
-    margin: 1rem auto;
-    width: 85%;
-    max-width: 700px;
-    padding: .5rem;
+  display: block;
+  margin: 1rem auto;
+  width: 85%;
+  max-width: 700px;
+  padding: 0.5rem;
+}
+
+.wrapper .file_input {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  text-overflow: clip;
 }
 
 .wrapper > button {
-    background-color: var(--orange);
+  background-color: var(--orange);
 }
 
 .wrapper > button:hover {
-    background-color: var(--red);
+  background-color: var(--red);
 }
 
 .error {
-    color: var(--red);
-    padding-bottom: 2.5rem;
+  color: var(--red);
+  padding-bottom: 2.5rem;
 }
