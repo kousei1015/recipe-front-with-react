@@ -243,3 +243,11 @@ button:hover {
 button:disabled {
   cursor: no-drop;
 }
+
+input::file-selector-button {
+  color: var(--white);
+  background-color: var(--orange);
+  border: none;
+  padding: 0.5em;
+  border-radius: 0.5rem;
+}
