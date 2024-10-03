@@ -83,6 +83,7 @@ function ProfileEdit() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.wrapper}>
       <h2>プロフィール編集</h2>
+      <p>名前</p>
       <input
         data-testid="user-name"
         type="text"
@@ -95,7 +96,9 @@ function ProfileEdit() {
           {errors.name?.message}
         </p>
       )}
+      <p>プロフィール画像</p>
       <input
+        className={styles.file_input}
         type="file"
         data-testid="avatar"
         ref={(e) => {
