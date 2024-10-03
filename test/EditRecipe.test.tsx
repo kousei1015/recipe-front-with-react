@@ -104,12 +104,12 @@ const setupTestRouter = (initialEntries = ["/1/edit"]) => {
 const getElements = async () => {
   await screen.findByText("レシピ編集画面"); // この行で待機
   return {
-    nameInput: await screen.findByPlaceholderText("レシピのタイトルを入力して下さい"),
-    instructionInput: await screen.findByPlaceholderText("手順の内容を入力"),
+    nameInput: await screen.findByDisplayValue("test_name"),
+    instructionInput: await screen.findByDisplayValue("process_test"),
+    ingredientName: await screen.findByDisplayValue("test1"),
+    ingredientQuantity: await screen.findByDisplayValue("100g"),
     selectElement: await screen.findByRole("combobox"),
-    ingredientName: await screen.findByPlaceholderText("材料の名前"),
-    ingredientQuantity: await screen.findByPlaceholderText("量"),
-    submitButton: await screen.findByText("送信"),
+    submitButton: await screen.findByText("送信"), 
   };
 };
 
@@ -158,7 +158,7 @@ describe("EditRecipe Component", () => {
     } = await getElements();
 
     await userEvent.type(nameInput, getRepeatedString(31));
-    await userEvent.type(instructionInput, getRepeatedString(201)); // 最初のインストラクションフィールドを使用
+    await userEvent.type(instructionInput, getRepeatedString(210)); // 最初のインストラクションフィールドを使用
     await userEvent.type(ingredientName, getRepeatedString(21)); // 最初の材料名フィールドを使用
     await userEvent.type(ingredientQuantity, getRepeatedString(21)); // 最初の材料量フィールドを使用
 
