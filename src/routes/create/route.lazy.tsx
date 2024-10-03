@@ -104,7 +104,13 @@ export function Create() {
         {errors.name && (
           <p className={styles.error_text}>{errors.name.message}</p>
         )}
-        <input type="file" name="file" onChange={handleFile} />
+        <h2>レシピ画像を選択</h2>
+        <input
+          className={styles.file_input}
+          type="file"
+          name="file"
+          onChange={handleFile}
+        />
         <div>
           <h2>作り方</h2>
           {instructionFields.map((field, index) => (

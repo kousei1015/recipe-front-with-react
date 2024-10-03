@@ -15,7 +15,7 @@ export const Route = createLazyFileRoute("/$recipeId/edit")({
 
 export function Index() {
   const { recipeId }= useParams({ experimental_returnIntersection: true, strict: false });
-  
+
   const { data: recipe, isSuccess } = useFetchRecipe(recipeId!);
   const navigate = useNavigate();
   const putMutation = usePutRecipe();
@@ -125,7 +125,13 @@ export function Index() {
         {errors.name && (
           <p className={styles.error_text}>{errors.name.message}</p>
         )}
-        <input type="file" name="file" onChange={handleFile} />
+        <h2>レシピ画像</h2>
+        <input
+          className={styles.file_input}
+          type="file"
+          name="file"
+          onChange={handleFile}
+        />
         <div>
           <h2>作り方</h2>
           {instructionFields.map((field, index) => (
