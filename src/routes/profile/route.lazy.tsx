@@ -1,5 +1,5 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import styles from "@/styles/Sign.module.css";
@@ -33,6 +33,7 @@ function ProfileEdit() {
     },
   });
 
+  const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const fileInput = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -46,14 +47,9 @@ function ProfileEdit() {
 
   const { ref } = register("avatar");
 
-  const onSubmit = async (data: ProfileEditProps) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-
-    // 画像の圧縮処理
-    if (fileInput.current?.files?.[0]) {
-      const imageFile = fileInput.current.files[0];
-
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
       const options = {
         maxSizeMB: 0.3,
         maxWidthOrHeight: 1000,
@@ -61,13 +57,21 @@ function ProfileEdit() {
 
       try {
         // 画像を圧縮
-        const compressedFile = await imageCompression(imageFile, options);
-
-        // 圧縮した画像をFormDataに追加
-        formData.append("avatar", compressedFile);
+        const compressed = await imageCompression(file, options);
+        setCompressedFile(compressed);
       } catch (error) {
-        window.alert("エラーが発生しました。もう一度やり直してください");
+        window.alert("画像の圧縮中にエラーが発生しました。");
       }
+    }
+  };
+
+  const onSubmit = async (data: ProfileEditProps) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+
+    // 圧縮された画像が存在する場合のみ追加
+    if (compressedFile) {
+      formData.append("avatar", compressedFile);
     }
 
     await editProfileMutation.mutateAsync(formData);
@@ -98,6 +102,7 @@ function ProfileEdit() {
           ref(e);
           fileInput.current = e;
         }}
+        onChange={handleFileChange}
       />
       <button type="submit">送信する</button>
     </form>
