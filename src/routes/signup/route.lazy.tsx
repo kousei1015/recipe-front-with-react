@@ -41,7 +41,6 @@ function SignUp () {
     navigate({
       to: "/"
     })
-
   };
 
   return (
@@ -58,7 +57,10 @@ function SignUp () {
           {errors.email?.message}
         </p>
       )}
-      <p>パスワードを入力してください</p>
+      <p>
+        パスワードを入力してください <br />
+        <span>※最低6文字以上</span>
+      </p>
       <input
         type="password"
         {...register("password")}
