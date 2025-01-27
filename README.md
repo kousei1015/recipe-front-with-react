@@ -4,6 +4,10 @@
 
 URLは https://web.arrange-cook.work です
 
+バックエンド部分のレポジトリのURLは
+https://github.com/kousei1015/recipe-backend
+です
+
 ## アプリの概要
 
 アレンジレシピを投稿することを目的としたアプリです。
